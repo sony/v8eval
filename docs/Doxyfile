@@ -1,0 +1,7 @@
+PROJECT_NAME     = v8eval
+PROJECT_NUMBER   = 0.1.3
+OUTPUT_DIRECTORY = .
+OUTPUT_LANGUAGE  = English
+EXTRACT_ALL      = YES
+INPUT            = ../src
+GENERATE_LATEX   = NO

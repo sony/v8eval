@@ -1,0 +1,5 @@
+*.pyc
+/build
+/docs
+/v8eval/v8eval.h
+/v8eval/v8eval.py

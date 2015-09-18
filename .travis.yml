@@ -1,0 +1,12 @@
+language: go
+go:
+  - 1.4
+os:
+  - osx
+before_install:
+  - brew update
+  - brew install swig
+install:
+  - go get github.com/stretchr/testify
+script:
+  - ./build.sh test

@@ -1,0 +1,11 @@
+*.o
+*.so
+/.gclient
+/.gclient_entries
+/build
+/depot_tools
+/dist
+/docs/html
+/v8
+/MANIFEST
+v8eval_wrap.cxx

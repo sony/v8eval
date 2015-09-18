@@ -1,0 +1,17 @@
+include build.sh
+include CMakeLists.txt
+include LICENSE
+include README.md
+
+recursive-include python *.py
+recursive-include python *.sh
+recursive-include src *
+
+prune build
+prune depot_tools
+prune docs
+prune go
+prune python/build
+prune python/docs
+prune test
+prune v8
