@@ -1,5 +1,7 @@
 # v8eval
 
+[![Build Status](https://travis-ci.org/sony/v8eval.svg)](https://travis-ci.org/sony/v8eval)
+
 Multi-language bindings to JavaScript engine V8.
 
 Currently v8eval provides Go and Python bindings to the latest V8 and supports Linux and Mac OS X.
