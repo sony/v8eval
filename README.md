@@ -1,6 +1,7 @@
 # v8eval
 
 [![Build Status](https://travis-ci.org/sony/v8eval.svg)](https://travis-ci.org/sony/v8eval)
+[![PyPI version](https://badge.fury.io/py/v8eval.svg)](http://badge.fury.io/py/v8eval)
 
 Multi-language bindings to JavaScript engine V8.
 
