@@ -46,7 +46,9 @@ install_v8() {
 
   cd $V8EVAL_ROOT
   fetch v8
-  cd v8 && CFLAGS="-fPIC" CXXFLAGS="-fPIC" make x64.release V=1
+  cd v8
+  git checkout 4.7.68
+  CFLAGS="-fPIC" CXXFLAGS="-fPIC" make x64.release V=1
 }
 
 build() {
