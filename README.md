@@ -48,7 +48,7 @@ You can create the Sphinx documentation under python/docs.
 python/build.sh docs
 ```
 
-## Example
+## Examples
 
 #### Go
 
@@ -57,7 +57,7 @@ import "github.com/sony/v8eval/go/v8eval"
 
 func Add(x, y int) int {
     var v8 = v8eval.NewV8()
-    v8.Eval("function add(x, y) { return x + y; }", nil)
+    v8.Eval("var add = (x, y) => x + y;", nil)
 
     var sum int;
     v8.Call("add", []int{x, y}, &sum)
@@ -72,7 +72,7 @@ import v8eval
 
 def add(x, y):
     v8 = v8eval.V8()
-    v8.eval('function add(x, y) { return x + y; }')
+    v8.eval('var add = (x, y) => x + y;')
     return v8.call('add', [x, y])
 ```
 

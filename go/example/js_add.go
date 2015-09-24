@@ -8,7 +8,7 @@ import (
 
 func Add(x, y int) int {
     var v8 = v8eval.NewV8()
-    v8.Eval("function add(x, y) { return x + y; }", nil)
+    v8.Eval("var add = (x, y) => x + y;", nil)
 
     var sum int;
     v8.Call("add", []int{x, y}, &sum)
