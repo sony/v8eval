@@ -51,9 +51,24 @@ install_v8() {
   CFLAGS="-fPIC" CXXFLAGS="-fPIC" make x64.release V=1
 }
 
+install_libuv() {
+  if [ -d $V8EVAL_ROOT/uv ]; then
+    return 0
+  fi
+
+  cd $V8EVAL_ROOT
+  git clone https://github.com/libuv/libuv.git uv
+  cd uv
+  git checkout v1.7.5
+  sh autogen.sh
+  ./configure --with-pic --disable-shared
+  make V=1
+}
+
 build() {
   install_depot_tools
   install_v8
+  install_libuv
 
   cd $V8EVAL_ROOT
   mkdir -p build

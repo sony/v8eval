@@ -19,6 +19,7 @@ set(v8eval-linklibs
     icui18n
     icuuc
     icudata
+    uv
     gtest
     gtest_main
 )
