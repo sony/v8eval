@@ -9,6 +9,7 @@ from sys import platform
 # set path variables
 v8eval_root = abspath(dirname(__file__))
 v8_dir = v8eval_root + "/v8"
+uv_dir = v8eval_root + "/uv"
 py_dir = v8eval_root + "/python"
 py_v8eval_dir = py_dir + "/v8eval"
 
@@ -24,7 +25,7 @@ system("cat " + py_dir + "/_v8eval.py >> " + py_v8eval_dir + "/v8eval.py")
 
 
 # build _v8eval.so
-include_dirs = [v8_dir, v8_dir + '/include']
+include_dirs = [v8_dir, v8_dir + '/include', uv_dir + '/include']
 
 library_dirs = [v8eval_root + '/build']
 if platform == "linux" or platform == "linux2":
@@ -32,6 +33,7 @@ if platform == "linux" or platform == "linux2":
                      v8_dir + '/out/x64.release/obj.target/third_party/icu']
 elif platform == "darwin":
     library_dirs += [v8_dir + '/out/x64.release']
+library_dirs += [uv_dir + '/.libs']
 
 v8eval_module = Extension(
     '_v8eval',
@@ -43,7 +45,8 @@ v8eval_module = Extension(
                'v8_nosnapshot',
                'icui18n',
                'icuuc',
-               'icudata'],
+               'icudata',
+               'uv'],
     include_dirs=include_dirs,
     library_dirs=library_dirs,
     extra_compile_args=['-O3',
