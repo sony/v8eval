@@ -13,6 +13,7 @@ include_directories(
     v8/include
     v8/third_party/icu/source/i18n
     v8/third_party/icu/source/common
+    uv/include
     src
     test/googletest/googletest/include
 )
@@ -30,8 +31,13 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
+link_directories(
+    uv/.libs/
+)
+
 add_library(v8eval STATIC
    	src/v8eval.cxx
+	src/dbgsrv.cxx
 )
 
 set(v8eval-cflags
