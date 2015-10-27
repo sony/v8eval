@@ -6,6 +6,7 @@
 /depot_tools
 /dist
 /docs/html
+/uv
 /v8
 /MANIFEST
 v8eval_wrap.cxx
