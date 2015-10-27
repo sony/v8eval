@@ -10,8 +10,9 @@ if [ `uname` = "Darwin" ]; then
 else
   V8EVAL_LIBRARY_PATH="$V8EVAL_LIBRARY_PATH -L$V8EVAL_ROOT/v8/out/x64.release/obj.target/tools/gyp -L$V8EVAL_ROOT/v8/out/x64.release/obj.target/third_party/icu"
 fi
+V8EVAL_LIBRARY_PATH="$V8EVAL_LIBRARY_PATH -L$V8EVAL_ROOT/uv/.libs"
 
-V8EVAL_LIBRARIES="-lv8eval -lv8_libplatform -lv8_base -lv8_libbase -lv8_nosnapshot -licui18n -licuuc -licudata"
+V8EVAL_LIBRARIES="-lv8eval -lv8_libplatform -lv8_base -lv8_libbase -lv8_nosnapshot -licui18n -licuuc -licudata -luv"
 if [ `uname` = "Linux" ] ; then
   V8EVAL_LIBRARIES="$V8EVAL_LIBRARIES -ldl -lpthread"
 fi
