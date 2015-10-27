@@ -36,8 +36,8 @@ link_directories(
 )
 
 add_library(v8eval STATIC
-   	src/v8eval.cxx
-	src/dbgsrv.cxx
+    src/v8eval.cxx
+    src/dbgsrv.cxx
 )
 
 set(v8eval-cflags
