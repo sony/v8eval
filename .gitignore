@@ -7,5 +7,6 @@
 /dist
 /docs/html
 /v8
+/uv
 /MANIFEST
 v8eval_wrap.cxx
