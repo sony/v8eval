@@ -80,7 +80,7 @@ _V8::_V8() {
 }
 
 _V8::~_V8() {
-  if (dbg_server_ != nullptr) {
+  if (dbg_server_) {
     delete dbg_server_;
   }
 
@@ -197,7 +197,7 @@ std::string _V8::call(const std::string& func, const std::string& args) {
 }
 
 bool _V8::debugger_enable(int port) {
-  if (dbg_server_ != nullptr) {
+  if (dbg_server_) {
     return false;
   }
   dbg_server_ = new DbgSrv(*this);
@@ -210,7 +210,7 @@ bool _V8::debugger_enable(int port) {
 }
 
 void _V8::debugger_disable() {
-  if (dbg_server_ != nullptr) {
+  if (dbg_server_) {
     delete dbg_server_;
     dbg_server_ = nullptr;
   }
@@ -221,7 +221,7 @@ void _V8::debugger_message_handler(const v8::Debug::Message& message) {
   _V8 *_v8 = (v8eval::_V8*)isolate->GetData(0);
   std::string string = *v8::String::Utf8Value(message.GetJSON());
 
-  if (_v8->callback_ != nullptr) {
+  if (_v8->callback_) {
     _v8->callback_(string, _v8->callback_opq_);
   }
 }
@@ -231,7 +231,7 @@ bool _V8::debugger_init(debugger_cb cb, void *cbopq) {
   create_params.array_buffer_allocator = &allocator;
   dbg_isolate_ = v8::Isolate::New(create_params);
 
-  if (callback_ != nullptr) {
+  if (callback_) {
     return false;
   }
   callback_ = cb;
@@ -260,7 +260,7 @@ bool _V8::debugger_send(const std::string& cmd) {
   v8::Isolate::Scope isolate_scope(dbg_isolate_);
   v8::HandleScope handle_scope(dbg_isolate_);
 
-  if (callback_ == nullptr) {
+  if (!callback_) {
     return false;
   }
 
