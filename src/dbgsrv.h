@@ -31,17 +31,17 @@ class DbgSrv {
   inline int get_port() { return dbgsrv_port_; }
 
  private:
-  static void recv_from_debugger_(std::string& string, void *opq);
+  static void recv_from_debugger(std::string& string, void *opq);
 
-  static void dbgsrv_do_clnt_(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
-  static void dbgsrv_do_send_(uv_async_t *async);
-  static void dbgsrv_do_serv_(uv_stream_t *server, int status);
-  static void dbgsrv_do_stop_(uv_async_t *async);
-  static void dbgsrv_(void *);
+  static void dbgsrv_do_clnt(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf);
+  static void dbgsrv_do_send(uv_async_t *async);
+  static void dbgsrv_do_serv(uv_stream_t *server, int status);
+  static void dbgsrv_do_stop(uv_async_t *async);
+  static void dbgsrv(void *);
 
-  static void dbgproc_do_proc_(uv_async_t *);
-  static void dbgproc_do_stop_(uv_async_t *);
-  static void dbgproc_(void *);
+  static void dbgproc_do_proc(uv_async_t *);
+  static void dbgproc_do_stop(uv_async_t *);
+  static void dbgproc(void *);
 
  private:
   _V8& v8_;

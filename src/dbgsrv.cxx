@@ -24,9 +24,9 @@ DbgSrv::DbgSrv(_V8& v8) : v8_(v8) {
 
   // Start up the Debugger Processing Loop
   uv_loop_init(&dbgproc_loop_);
-  uv_async_init(&dbgproc_loop_, &dbgproc_proc_, dbgproc_do_proc_);
-  uv_async_init(&dbgproc_loop_, &dbgproc_stop_, dbgproc_do_stop_);
-  uv_thread_create(&dbgproc_thread_, dbgproc_, this);
+  uv_async_init(&dbgproc_loop_, &dbgproc_proc_, dbgproc_do_proc);
+  uv_async_init(&dbgproc_loop_, &dbgproc_stop_, dbgproc_do_stop);
+  uv_thread_create(&dbgproc_thread_, dbgproc, this);
 
   status_ = dbgsrv_offline;
 }
@@ -51,7 +51,7 @@ static void end_write(uv_write_t *req, int status) {
   free(req);
 }
 
-void DbgSrv::dbgsrv_do_send_(uv_async_t *async) {
+void DbgSrv::dbgsrv_do_send(uv_async_t *async) {
   DbgSrv *db = container_of(async, &DbgSrv::dbgsrv_send_);
   uv_buf_t buf;
   uv_write_t *wreq;
@@ -66,7 +66,7 @@ void DbgSrv::dbgsrv_do_send_(uv_async_t *async) {
   }
 }
 
-void DbgSrv::dbgsrv_do_clnt_(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf) {
+void DbgSrv::dbgsrv_do_clnt(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf) {
   DbgSrv *db = container_of(client, &DbgSrv::dbgsrv_clnt_);
 
   if (nread == 0) return;
@@ -91,7 +91,7 @@ static void alloc_buffer(uv_handle_t *handle, size_t size, uv_buf_t *buf) {
   buf->base = (char*) malloc(size);
 }
 
-void DbgSrv::dbgsrv_do_serv_(uv_stream_t *server, int status) {
+void DbgSrv::dbgsrv_do_serv(uv_stream_t *server, int status) {
   DbgSrv *db = container_of(server, &DbgSrv::dbgsrv_serv_);
 
   if (status < 0) {
@@ -106,13 +106,13 @@ void DbgSrv::dbgsrv_do_serv_(uv_stream_t *server, int status) {
   }
 
   // Setup async R/W callbacks.
-  uv_async_init(&db->dbgsrv_loop_, &db->dbgsrv_send_, dbgsrv_do_send_);
-  uv_read_start((uv_stream_t *)&db->dbgsrv_clnt_, alloc_buffer, dbgsrv_do_clnt_);
+  uv_async_init(&db->dbgsrv_loop_, &db->dbgsrv_send_, dbgsrv_do_send);
+  uv_read_start((uv_stream_t *)&db->dbgsrv_clnt_, alloc_buffer, dbgsrv_do_clnt);
 
   db->status_ = dbgsrv_connected;
 }
 
-void DbgSrv::dbgsrv_do_stop_(uv_async_t *async) {
+void DbgSrv::dbgsrv_do_stop(uv_async_t *async) {
   DbgSrv *db = container_of(async, &DbgSrv::dbgsrv_stop_);
 
   // Stop Server Loop
@@ -127,32 +127,32 @@ void DbgSrv::dbgsrv_do_stop_(uv_async_t *async) {
   }
 }
 
-void DbgSrv::dbgsrv_(void *ptr) {
+void DbgSrv::dbgsrv(void *ptr) {
   DbgSrv *db = (DbgSrv*)ptr;
 
   uv_run(&db->dbgsrv_loop_, UV_RUN_DEFAULT);
 }
 
-void DbgSrv::dbgproc_do_stop_(uv_async_t *async) {
+void DbgSrv::dbgproc_do_stop(uv_async_t *async) {
   DbgSrv *db = container_of(async, &DbgSrv::dbgproc_stop_);
 
   uv_close((uv_handle_t *)&db->dbgproc_proc_, NULL);
   uv_close((uv_handle_t *)&db->dbgproc_stop_, NULL);
 }
 
-void DbgSrv::dbgproc_do_proc_(uv_async_t *async) {
+void DbgSrv::dbgproc_do_proc(uv_async_t *async) {
   DbgSrv *db = container_of(async, &DbgSrv::dbgproc_proc_);
 
   db->v8_.debugger_process();
 }
 
-void DbgSrv::dbgproc_(void *ptr) {
+void DbgSrv::dbgproc(void *ptr) {
   DbgSrv *db = (DbgSrv*)ptr;
 
   uv_run(&db->dbgproc_loop_, UV_RUN_DEFAULT);
 }
 
-void DbgSrv::recv_from_debugger_(std::string& string, void *opq) {
+void DbgSrv::recv_from_debugger(std::string& string, void *opq) {
   DbgSrv *db = (DbgSrv *)opq;
 
   db->msg_queue_.push_front(string);
@@ -191,18 +191,18 @@ bool DbgSrv::start(int port) {
     dbgsrv_port_ = port;
   }
 
-  if (uv_listen((uv_stream_t *)&dbgsrv_serv_, 0, dbgsrv_do_serv_)) {
+  if (uv_listen((uv_stream_t *)&dbgsrv_serv_, 0, dbgsrv_do_serv)) {
     uv_close((uv_handle_t *)&dbgsrv_serv_, NULL);
     perror("listen");
     return false;
   }
 
   // Start V8 debugger
-  v8_.debugger_init(recv_from_debugger_, this);
+  v8_.debugger_init(recv_from_debugger, this);
 
   // Start the Debug Server Loop
-  uv_async_init(&dbgsrv_loop_, &dbgsrv_stop_, dbgsrv_do_stop_);
-  uv_thread_create(&dbgsrv_thread_, dbgsrv_, this);
+  uv_async_init(&dbgsrv_loop_, &dbgsrv_stop_, dbgsrv_do_stop);
+  uv_thread_create(&dbgsrv_thread_, dbgsrv, this);
 
   status_ = dbgsrv_started;
   return true;
