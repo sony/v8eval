@@ -174,6 +174,7 @@ bool DbgSrv::start(int port) {
   uv_tcp_init(&dbgsrv_loop_, &dbgsrv_serv_);
   uv_ip4_addr("127.0.0.1", port, &addr);
   if (uv_tcp_bind(&dbgsrv_serv_, (const struct sockaddr*)&addr, 0)) {
+    uv_close((uv_handle_t *)&dbgsrv_serv_, NULL);
     perror("bind");
     return false;
   }
@@ -181,6 +182,7 @@ bool DbgSrv::start(int port) {
   if (port == 0) {
     int addrlen = sizeof(addr);
     if (uv_tcp_getsockname(&dbgsrv_serv_, (struct sockaddr*)&addr, &addrlen)) {
+      uv_close((uv_handle_t *)&dbgsrv_serv_, NULL);
       perror("getsockname");
       return false;
     }
@@ -190,6 +192,7 @@ bool DbgSrv::start(int port) {
   }
 
   if (uv_listen((uv_stream_t *)&dbgsrv_serv_, 0, dbgsrv_do_serv_)) {
+    uv_close((uv_handle_t *)&dbgsrv_serv_, NULL);
     perror("listen");
     return false;
   }
