@@ -11,6 +11,8 @@ namespace v8eval {
 
 class DbgSrv;
 
+typedef void (*debugger_cb)(std::string&, void *opq);
+
 /// \brief Initialize the V8 runtime environment
 /// \return success or not as boolean
 ///
@@ -22,8 +24,6 @@ bool initialize();
 ///
 /// This method disposes the V8 runtime environment.
 bool dispose();
-
- typedef void (*debugger_cb)(std::string&, void *opq);
 
 /// \class _V8
 ///
@@ -85,10 +85,11 @@ class _V8 {
  private:
   v8::Isolate* isolate_;
   v8::Persistent<v8::Context> context_;
-  class DbgSrv *dbg_server_;
+
+  DbgSrv* dbg_server_;
   v8::Isolate* dbg_isolate_;
   debugger_cb callback_;
-  void *callbackopq_;
+  void* callback_opq_;
 
   friend class DbgSrv;
 };

@@ -65,7 +65,7 @@ _V8::_V8() {
   dbg_server_ = nullptr;
   dbg_isolate_ = nullptr;
   callback_ = nullptr;
-  callbackopq_ = nullptr;
+  callback_opq_ = nullptr;
 
   // Use Isolate's local storage to store a pointer to the associated
   // V8 instance. This is retrieved in the V8 debugger's callback, as
@@ -222,7 +222,7 @@ void _V8::debugger_message_handler(const v8::Debug::Message& message) {
   std::string string = *v8::String::Utf8Value(message.GetJSON());
 
   if (_v8->callback_ != nullptr) {
-    _v8->callback_(string, _v8->callbackopq_);
+    _v8->callback_(string, _v8->callback_opq_);
   }
 }
 
@@ -235,7 +235,7 @@ bool _V8::debugger_init(debugger_cb cb, void *cbopq) {
     return false;
   }
   callback_ = cb;
-  callbackopq_ = cbopq;
+  callback_opq_ = cbopq;
 
   // Set Debuger callback.
   v8::Locker locker(isolate_);
@@ -277,7 +277,7 @@ void _V8::debugger_stop() {
   v8::Debug::SetMessageHandler(nullptr);
 
   callback_ = nullptr;
-  callbackopq_ = nullptr;
+  callback_opq_ = nullptr;
   dbg_isolate_->Dispose();
   dbg_isolate_ = nullptr;
 }
