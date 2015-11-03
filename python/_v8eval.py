@@ -79,7 +79,7 @@ class V8:
             except ValueError:
                 raise V8Error(res)
 
-    def debugger_enable(self, port):
+    def enable_debugger(self, port):
         """"Starts a debug server associated with the V8 instance.
 
         Args:
@@ -94,9 +94,9 @@ class V8:
         if not isinstance(port, int):
             raise TypeError('port is not integer')
 
-        return self._v8.debugger_enable(port)
+        return self._v8.enable_debugger(port)
 
-    def debugger_disable(self):
+    def disable_debugger(self):
         """"Stop the debug server, if running.
 
         Args:
@@ -108,7 +108,7 @@ class V8:
         Raises:
             None.
         """
-	self._v8.debugger_disable()
+	self._v8.disable_debugger()
 
 # initialize the V8 runtime environment
 initialize()
