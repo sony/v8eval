@@ -62,13 +62,13 @@ class _V8 {
   /// debugger is started, the Javascript's "debugger" statement will
   /// cause the V8 instance to halt and wait for instructions through
   /// the debugger port.
-  bool debugger_enable(int port);
+  bool enable_debugger(int port);
 
   /// \brief Stop the debug server, if running.
   ///
   /// The debug server, if currently running, will be stopped, causing
   /// connections to remote debuggers to be dropped.
-  void debugger_disable();
+  void disable_debugger();
 
  private:
   static void debugger_message_handler(const v8::Debug::Message& message);

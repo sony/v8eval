@@ -196,7 +196,7 @@ std::string _V8::call(const std::string& func, const std::string& args) {
   }
 }
 
-bool _V8::debugger_enable(int port) {
+bool _V8::enable_debugger(int port) {
   if (dbg_server_) {
     return false;
   }
@@ -209,7 +209,7 @@ bool _V8::debugger_enable(int port) {
   return true;
 }
 
-void _V8::debugger_disable() {
+void _V8::disable_debugger() {
   if (dbg_server_) {
     delete dbg_server_;
     dbg_server_ = nullptr;
