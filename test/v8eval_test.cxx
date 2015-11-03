@@ -47,12 +47,28 @@ void test_call() {
   ASSERT_STREQ("ReferenceError: foo is not defined", v8.call("fail", "[]").c_str());
 }
 
+void test_debugger() {
+  v8eval::_V8 v8;
+
+  ASSERT_FALSE(v8.enable_debugger(-1));
+
+  int port = 12345;
+  ASSERT_TRUE(v8.enable_debugger(port));
+  ASSERT_FALSE(v8.enable_debugger(port));
+  v8.disable_debugger();
+}
+
 TEST(V8EvalTest, Eval) {
   test_eval();
 }
 
 TEST(V8EvalTest, Call) {
   test_call();
+}
+
+TEST(V8EvalTest, Debugger) {
+  test_debugger();
+  test_debugger();
 }
 
 void test_eval_repeatedly() {
