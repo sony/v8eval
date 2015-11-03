@@ -108,7 +108,7 @@ class V8:
         Raises:
             None.
         """
-	self._v8.disable_debugger()
+        self._v8.disable_debugger()
 
 # initialize the V8 runtime environment
 initialize()
