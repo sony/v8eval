@@ -2,11 +2,12 @@
 
 [![Build Status](https://travis-ci.org/sony/v8eval.svg)](https://travis-ci.org/sony/v8eval)
 [![PyPI version](https://badge.fury.io/py/v8eval.svg)](http://badge.fury.io/py/v8eval)
+[![Gem Version](https://badge.fury.io/rb/v8eval.svg)](https://badge.fury.io/rb/v8eval)
 [![GoDoc](https://godoc.org/github.com/sony/v8eval/go/v8eval?status.png)](http://godoc.org/github.com/sony/v8eval/go/v8eval)
 
 Multi-language bindings to JavaScript engine V8.
 
-Currently v8eval provides Go and Python bindings to the latest V8 4.7 and supports Linux and Mac OS X.
+Currently v8eval provides Go, Python and Ruby bindings to the latest V8 4.7 and supports Linux and Mac OS X.
 v8eval uses SWIG and can be extended easily for other languages.
 
 ## Pre-installation
@@ -36,6 +37,12 @@ $GOPATH/src/github.com/sony/v8eval/go/build.sh install
 pip install v8eval
 ```
 
+#### Ruby
+
+```
+gem install v8eval
+```
+
 ## Documentation
 
 #### Go
@@ -48,6 +55,14 @@ You can create the Sphinx documentation under python/docs.
 
 ```
 python/build.sh docs
+```
+
+#### Ruby
+
+You can create the YARD documentation under ruby/doc.
+
+```
+ruby/build.sh docs
 ```
 
 ## Examples
@@ -76,6 +91,18 @@ def add(x, y):
     v8 = v8eval.V8()
     v8.eval('var add = (x, y) => x + y;')
     return v8.call('add', [x, y])
+```
+
+#### Ruby
+
+```ruby
+require 'v8eval'
+
+def add(x, y)
+  v8 = V8Eval::V8.new
+  v8.eval('var add = (x, y) => x + y;')
+  v8.call('add', [x, y])
+end
 ```
 
 ## License

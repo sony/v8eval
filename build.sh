@@ -85,6 +85,10 @@ build_python() {
   $V8EVAL_ROOT/python/build.sh
 }
 
+build_ruby() {
+  $V8EVAL_ROOT/ruby/build.sh
+}
+
 docs() {
   cd $V8EVAL_ROOT/docs
   rm -rf ./html
@@ -105,6 +109,7 @@ test() {
   cd ..
   ./go/build.sh test || exit 1
   ./python/build.sh test || exit 1
+  ./ruby/build.sh test || exit 1
 }
 
 # dispatch subcommand
@@ -113,6 +118,7 @@ case "${SUBCOMMAND}" in
   ""       ) build ;;
   "go"     ) build_go ;;
   "python" ) build_python ;;
+  "ruby"   ) build_ruby ;;
   "docs"   ) docs ;;
   "test"   ) test ;;
   *        ) echo "unknown subcommand: ${SUBCOMMAND}"; exit 1 ;;
