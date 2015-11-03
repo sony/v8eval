@@ -1,0 +1,6 @@
+# run `bundle install` on this file to install development dependencies.
+source 'https://rubygems.org'
+
+gem 'rspec', '~> 3.0'
+gem 'rake', '~> 10.4.2'
+gem 'yard', '~> 0.8.7.6'

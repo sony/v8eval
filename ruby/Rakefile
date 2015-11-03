@@ -1,0 +1,28 @@
+# Rakefile
+require 'rake'
+require 'rake/clean'
+require_relative 'lib/setup/extension_builder'
+
+CLEAN.include('ext/**/*{.o,.log,.so,.bundle}')
+CLEAN.include('ext/**/Makefile')
+
+# set path variable
+v8eval_root = File.expand_path('..', Dir.pwd)
+
+# make instance of BuildTool class
+tool = BuildTool.new(v8eval_root)
+
+desc 'task to prepare for the build'
+task :prepare_build do
+  tool.run_swig
+end
+
+desc 'install v8 and build libv8eval.a'
+task :install_v8 do
+  tool.install_v8
+end
+
+desc 'build v8eval{.so,.dll,.bundle}'
+task :build_ext do
+  tool.build_ext
+end
