@@ -200,12 +200,14 @@ bool _V8::enable_debugger(int port) {
   if (dbg_server_) {
     return false;
   }
+
   dbg_server_ = new DbgSrv(*this);
   if (!dbg_server_->start(port)) {
     delete dbg_server_;
     dbg_server_ = nullptr;
     return false;
   }
+
   return true;
 }
 
@@ -234,6 +236,7 @@ bool _V8::debugger_init(debugger_cb cb, void *cbopq) {
   if (callback_) {
     return false;
   }
+
   callback_ = cb;
   callback_opq_ = cbopq;
 
