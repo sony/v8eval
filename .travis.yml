@@ -6,6 +6,10 @@ os:
 before_install:
   - brew update
   - brew install swig
+  # already installed in travis-ci:
+  # - brew install automake
+  # - brew install cmake
+  # - brew install libtool
 install:
   - go get github.com/stretchr/testify
 script:
