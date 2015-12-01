@@ -62,6 +62,21 @@ func TestCall(t *testing.T) {
 	assert.Equal(t, "json: cannot unmarshal number into Go value of type string", err.Error())
 }
 
+func TestDebugger(t *testing.T) {
+	v8 := NewV8()
+
+	err := v8.EnableDebugger(-1)
+	assert.NotNil(t, err)
+	assert.Equal(t, "failed to start debug server", err.Error())
+
+	port := 12345
+	assert.Nil(t, v8.EnableDebugger(port))
+	assert.NotNil(t, v8.EnableDebugger(port))
+	v8.DisableDebugger()
+	assert.Nil(t, v8.EnableDebugger(port))
+	v8.DisableDebugger()
+}
+
 func TestInParallel(t *testing.T) {
 	numCPU := runtime.NumCPU()
 	runtime.GOMAXPROCS(numCPU)
