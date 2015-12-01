@@ -86,15 +86,18 @@ class V8:
             port (int): The TCP/IP port the server will listen, at localhost.
 
         Return:
-            Success or not as a boolean.
+            None.
 
         Raises:
             TypeError: If port is not an int.
+
+            V8Error: If failing to start the debug server.
         """
         if not isinstance(port, int):
-            raise TypeError('port is not integer')
+            raise TypeError('port not integer')
 
-        return self._v8.enable_debugger(port)
+        if not self._v8.enable_debugger(port):
+            raise V8Error('failed to start debug server')
 
     def disable_debugger(self):
         """"Stop the debug server, if running.
