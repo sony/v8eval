@@ -100,7 +100,7 @@ class V8:
             raise V8Error('failed to start debug server')
 
     def disable_debugger(self):
-        """"Stop the debug server, if running.
+        """"Stops the debug server, if running.
 
         Args:
             None.
