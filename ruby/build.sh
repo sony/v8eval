@@ -3,12 +3,14 @@
 V8EVAL_ROOT=`cd $(dirname $0)/.. && pwd`
 
 build() {
-  cd $V8EVAL_ROOT/ruby && rake prepare_build
-  cd $V8EVAL_ROOT && gem build v8eval.gemspec
+  cd $V8EVAL_ROOT/ruby
+  rake prepare_build
+  rake build_ext
 }
 
 install() {
   cd $V8EVAL_ROOT
+  gem build v8eval.gemspec
   gem install v8eval-*.gem
 }
 
@@ -27,7 +29,6 @@ test() {
   bundle install
 
   rspec --init
-  rake build_ext
   rspec
 }
 
