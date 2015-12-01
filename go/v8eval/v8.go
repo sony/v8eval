@@ -53,9 +53,9 @@ func (v *v8) decode(str string, val interface{}) error {
 	if err != nil {
 		if strings.HasPrefix(err.Error(), "json: ") {
 			return err
-		} else {
-			return errors.New(str)
 		}
+
+		return errors.New(str)
 	}
 
 	return nil
