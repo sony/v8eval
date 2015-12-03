@@ -55,3 +55,20 @@ RSpec.describe V8Eval, '#multithreading' do
     end
   end
 end
+
+RSpec.describe V8Eval, '#test_debugger' do
+  context 'with debugging functionality' do
+    it 'should enable and disable debugger properly' do
+      v8 = V8Eval::V8.new
+      expect { v8.enable_debugger(0.1) }.to raise_exception(TypeError)
+      expect { v8.enable_debugger(-1) }.to raise_exception(V8Eval::V8Error)
+
+      port = 12_345
+      expect(v8.enable_debugger(port)).to be nil
+      expect { v8.enable_debugger(port) }.to raise_exception(V8Eval::V8Error)
+      expect(v8.disable_debugger).to be nil
+      expect(v8.enable_debugger(port)).to be nil
+      expect(v8.disable_debugger).to be nil
+    end
+  end
+end
