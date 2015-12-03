@@ -1,16 +1,12 @@
 FROM golang:1.5.1-wheezy
 
-# install new glibc
-RUN echo "deb http://ftp.debian.org/debian sid main" >> /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get -t sid install -y libc6-dev
-
 # install pyenv
 RUN git clone git://github.com/yyuu/pyenv.git /.pyenv
 ENV PYENV_ROOT /.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
 # install essentials to build python and ruby
+RUN apt-get update
 RUN apt-get install -y build-essential
 RUN apt-get install -y bzip2 libbz2-dev
 RUN apt-get install -y openssl libssl-dev
@@ -44,6 +40,11 @@ RUN apt-get install -y g++
 RUN apt-get install -y yodl
 RUN git clone https://github.com/swig/swig.git
 RUN cd swig && ./autogen.sh && ./configure && make && make install
+
+# install new glibc
+RUN echo "deb http://ftp.debian.org/debian sid main" >> /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get -t sid install -y libc6-dev
 
 # test v8eval
 ADD . $GOPATH/src/github.com/sony/v8eval
