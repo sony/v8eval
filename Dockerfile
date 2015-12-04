@@ -1,4 +1,4 @@
-FROM golang:1.5.1-wheezy
+FROM golang:1.5.1
 
 # install pyenv
 RUN git clone git://github.com/yyuu/pyenv.git /.pyenv
@@ -40,11 +40,6 @@ RUN apt-get install -y g++
 RUN apt-get install -y yodl
 RUN git clone https://github.com/swig/swig.git
 RUN cd swig && ./autogen.sh && ./configure && make && make install
-
-# install new glibc
-RUN echo "deb http://ftp.debian.org/debian sid main" >> /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get -t sid install -y libc6-dev
 
 # test v8eval
 ADD . $GOPATH/src/github.com/sony/v8eval
