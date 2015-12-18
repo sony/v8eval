@@ -29,8 +29,10 @@ header_dirs = [
 
 lib_dirs = [
   v8eval_root + '/build',
+  uv_dir + '/.libs',
   LIBDIR
 ]
+
 if RUBY_PLATFORM =~ /darwin/
   lib_dirs += [
     v8_dir + '/out/x64.release'
@@ -40,8 +42,10 @@ elsif RUBY_PLATFORM =~ /linux/
     v8_dir + '/out/x64.release/obj.target/tools/gyp',
     v8_dir + '/out/x64.release/obj.target/third_party/icu'
   ]
+
+  RbConfig::MAKEFILE_CONFIG['CC'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
+  RbConfig::MAKEFILE_CONFIG['CXX'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang++'
 end
-lib_dirs += [uv_dir + '/.libs']
 
 dir_config('', header_dirs, lib_dirs)
 
