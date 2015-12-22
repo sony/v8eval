@@ -20,7 +20,8 @@ system(v8eval_root + "/build.sh")
 
 # generate v8eval_wrap.cxx and v8eval.py
 system("cp " + v8eval_root + "/src/v8eval.h " + py_v8eval_dir)
-system("swig -c++ -python -outdir " + py_v8eval_dir + " -o "  + py_v8eval_dir + "/v8eval_wrap.cxx " + v8eval_root + "/src/v8eval.i")
+system("cp " + v8eval_root + "/src/v8eval_python.h " + py_v8eval_dir)
+system("swig -c++ -python -outdir " + py_v8eval_dir + " -o "  + py_v8eval_dir + "/v8eval_wrap.cxx " + py_v8eval_dir + "/v8eval.i")
 system("cat " + py_dir + "/_v8eval.py >> " + py_v8eval_dir + "/v8eval.py")
 
 
@@ -28,6 +29,7 @@ system("cat " + py_dir + "/_v8eval.py >> " + py_v8eval_dir + "/v8eval.py")
 include_dirs = [v8_dir, v8_dir + '/include', uv_dir + '/include']
 library_dirs = [v8eval_root + '/build', uv_dir + '/.libs']
 libraries=['v8eval',
+           'v8eval_python',
            'v8_libplatform',
            'v8_base',
            'v8_libbase',
@@ -50,7 +52,7 @@ elif platform == "darwin":
 
 v8eval_module = Extension(
     '_v8eval',
-    sources=[v8eval_root + '/python/v8eval/v8eval_wrap.cxx'],
+    sources=[py_v8eval_dir + '/v8eval_wrap.cxx'],
     libraries=libraries,
     include_dirs=include_dirs,
     library_dirs=library_dirs,

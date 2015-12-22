@@ -1,4 +1,4 @@
-# the following is appended to swig-generated file including _V8
+# the following is appended to swig-generated file including _PythonV8
 import json
 
 
@@ -18,7 +18,7 @@ class V8Error(Exception):
 class V8:
     """Represents a V8 instance."""
     def __init__(self):
-        self._v8 = _V8()
+        self._v8 = _PythonV8()
 
     def eval(self, src):
         """Evaluates JavaScript code.

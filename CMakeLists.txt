@@ -40,6 +40,10 @@ add_library(v8eval STATIC
     src/dbgsrv.cxx
 )
 
+add_library(v8eval_python STATIC
+    src/v8eval_python.cxx
+)
+
 set(v8eval-cflags
     -Wall
     -Wendif-labels
@@ -62,6 +66,10 @@ set(v8eval-cflags
 string(REPLACE ";" " " v8eval-cflags "${v8eval-cflags}")
 
 set_target_properties(v8eval PROPERTIES
+    COMPILE_FLAGS "${v8eval-cflags}"
+)
+
+set_target_properties(v8eval_python PROPERTIES
     COMPILE_FLAGS "${v8eval-cflags}"
 )
 
