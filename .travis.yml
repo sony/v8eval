@@ -14,3 +14,6 @@ install:
   - go get github.com/stretchr/testify
 script:
   - ./build.sh test
+  - ./go/build.sh test
+  - ./python/build.sh test
+  - ./ruby/build.sh test

@@ -77,24 +77,10 @@ build() {
   make VERBOSE=1
 }
 
-build_go() {
-  $V8EVAL_ROOT/go/build.sh
-}
-
-build_python() {
-  $V8EVAL_ROOT/python/build.sh
-}
-
-build_ruby() {
-  $V8EVAL_ROOT/ruby/build.sh
-}
-
 docs() {
   cd $V8EVAL_ROOT/docs
   rm -rf ./html
   doxygen
-
-  $V8EVAL_ROOT/python/build.sh docs
 }
 
 test() {
@@ -104,21 +90,13 @@ test() {
   cd $V8EVAL_ROOT/build
   cmake -DCMAKE_BUILD_TYPE=Release -DV8EVAL_TEST=ON ..
   make VERBOSE=1
-  ./test/v8eval-test || exit 1
-
-  cd ..
-  ./go/build.sh test || exit 1
-  ./python/build.sh test || exit 1
-  ./ruby/build.sh test || exit 1
+  ./test/v8eval-test
 }
 
 # dispatch subcommand
 SUBCOMMAND="$1";
 case "${SUBCOMMAND}" in
   ""       ) build ;;
-  "go"     ) build_go ;;
-  "python" ) build_python ;;
-  "ruby"   ) build_ruby ;;
   "docs"   ) docs ;;
   "test"   ) test ;;
   *        ) echo "unknown subcommand: ${SUBCOMMAND}"; exit 1 ;;

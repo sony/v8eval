@@ -44,3 +44,6 @@ RUN cd swig && ./autogen.sh && ./configure && make && make install
 # test v8eval
 ADD . $GOPATH/src/github.com/sony/v8eval
 RUN $GOPATH/src/github.com/sony/v8eval/build.sh test
+RUN $GOPATH/src/github.com/sony/v8eval/go/build.sh test
+RUN $GOPATH/src/github.com/sony/v8eval/python/build.sh test
+RUN $GOPATH/src/github.com/sony/v8eval/ruby/build.sh test
