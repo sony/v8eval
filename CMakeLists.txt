@@ -48,6 +48,10 @@ add_library(v8eval_python STATIC
     src/v8eval_python.cxx
 )
 
+add_library(v8eval_ruby STATIC
+    src/v8eval_ruby.cxx
+)
+
 set(v8eval-cflags
     -Wall
     -Wendif-labels
@@ -78,6 +82,10 @@ set_target_properties(v8eval_go PROPERTIES
 )
 
 set_target_properties(v8eval_python PROPERTIES
+    COMPILE_FLAGS "${v8eval-cflags}"
+)
+
+set_target_properties(v8eval_ruby PROPERTIES
     COMPILE_FLAGS "${v8eval-cflags}"
 )
 

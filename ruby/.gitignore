@@ -1,11 +1,10 @@
 .yardoc/**/*
 doc/**/*
 ext/v8eval/v8eval.h
-ext/v8eval/v8eval_wrap.cxx
+ext/v8eval/v8eval_ruby.h
 ext/v8eval/Makefile
 ext/v8eval/v8eval.bundle
 ext/v8eval/.RUBYARCHDIR.-.v8eval.time
 lib/v8eval/**/*
 spec/spec_helper.rb
 Gemfile.lock
-

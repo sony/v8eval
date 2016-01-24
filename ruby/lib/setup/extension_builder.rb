@@ -16,9 +16,10 @@ class BuildTool
 
   def run_swig
     system('cp ' + @v8eval_root + '/src/v8eval.h ' + @rb_ext_v8eval_dir)
+    system('cp ' + @v8eval_root + '/src/v8eval_ruby.h ' + @rb_ext_v8eval_dir)
     system('swig -c++ -ruby -autorename -outdir ' + @rb_ext_v8eval_dir +
-      ' -o ' + @rb_ext_v8eval_dir + '/v8eval_wrap.cxx ' + @v8eval_root +
-      '/src/v8eval.i')
+      ' -o ' + @rb_ext_v8eval_dir + '/v8eval_wrap.cxx ' + @rb_ext_v8eval_dir +
+      '/v8eval.i')
   end
 
   def build_ext
