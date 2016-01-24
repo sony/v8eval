@@ -33,13 +33,13 @@ type V8 interface {
 }
 
 type v8 struct {
-	xV8 X_V8
+	xV8 X_GoV8
 }
 
 // NewV8 creates a new V8 instance.
 func NewV8() V8 {
 	v := new(v8)
-	v.xV8 = NewX_V8()
+	v.xV8 = NewX_GoV8()
 	return v
 }
 
