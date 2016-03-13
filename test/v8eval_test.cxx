@@ -31,7 +31,7 @@ void test_eval() {
   ASSERT_STREQ("{\"a\":1,\"b\":2}", v8.eval("var x = { a: 1 }; x['b'] = 2; x").c_str());
 
   ASSERT_STREQ("ReferenceError: foo is not defined", v8.eval("foo").c_str());
-  ASSERT_STREQ("SyntaxError: Unexpected token ILLEGAL", v8.eval("@").c_str());
+  ASSERT_STREQ("SyntaxError: Invalid or unexpected token", v8.eval("@").c_str());
 }
 
 void test_call() {
