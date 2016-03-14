@@ -2,12 +2,15 @@
 
 V8EVAL_ROOT=`cd $(dirname $0) && pwd`
 
-if [ `uname` = "Linux" ] ; then
+PLATFORM=`uname`
+if [ $PLATFORM = "Linux" ] ; then
+  NUM_CPU=`cat /proc/cpuinfo | grep cores | grep -o '[0-9]\+'`
+
   export CC=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang
   export CXX=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang++
-fi
+elif [ $PLATFORM = "Darwin" ]; then
+  NUM_CPU=`system_profiler SPHardwareDataType | grep Cores | grep -o '[0-9]\+'`
 
-if [ `uname` = "Darwin" ]; then
   export CC=`which clang`
   export CXX=`which clang++`
   export CPP="`which clang` -E"
@@ -17,6 +20,9 @@ if [ `uname` = "Darwin" ]; then
   export CPP_host="`which clang` -E"
   export LINK_host=`which clang++`
   export GYP_DEFINES="clang=1 mac_deployment_target=10.10"
+else
+  echo "unsupported platform: ${PLATFORM}"
+  exit 1
 fi
 
 install_depot_tools() {
@@ -48,7 +54,7 @@ install_v8() {
   fetch v8
   cd v8
   git checkout 5.1.117
-  CFLAGS="-fPIC" CXXFLAGS="-fPIC" make x64.release V=1
+  CFLAGS="-fPIC" CXXFLAGS="-fPIC" make x64.release -j$NUM_CPU V=1
 }
 
 install_libuv() {
