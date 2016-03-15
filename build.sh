@@ -28,6 +28,7 @@ else
   echo "unsupported platform: ${PLATFORM}"
   exit 1
 fi
+echo $NUM_CPU_CORES
 
 install_depot_tools() {
   export PATH=$V8EVAL_ROOT/depot_tools:$PATH
