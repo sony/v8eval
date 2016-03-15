@@ -1,0 +1,7 @@
+machine:
+  services:
+    - docker
+
+test:
+  override:
+    - docker build -t sony/v8eval .
