@@ -9,7 +9,11 @@ if [ $PLATFORM = "Linux" ] ; then
   export CC=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang
   export CXX=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang++
 elif [ $PLATFORM = "Darwin" ]; then
-  NUM_CPU_CORES=`sysctl -n hw.ncpu`
+  if [ $TRAVIS ]; then
+    NUM_CPU_CORES=2
+  else
+    NUM_CPU_CORES=`sysctl -n hw.ncpu`
+  fi
 
   export CC=`which clang`
   export CXX=`which clang++`
