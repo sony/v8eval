@@ -1,4 +1,4 @@
-app:
+v8eval:
   build:
-    image: v8eval
+    image: sony/v8eval
     dockerfile_path: Dockerfile
