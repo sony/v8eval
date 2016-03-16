@@ -1,0 +1,4 @@
+app:
+  build:
+    image: v8eval
+    dockerfile_path: Dockerfile
