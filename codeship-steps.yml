@@ -1,2 +1,2 @@
-- service: app
+- service: v8eval
   command: cd go/example && go build && ./example
