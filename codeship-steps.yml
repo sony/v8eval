@@ -1,0 +1,2 @@
+- service: app
+  command: cd go/example && go build && ./example
