@@ -38,12 +38,13 @@ RUN apt-get install -y libpcre3-dev
 RUN apt-get install -y bison
 RUN apt-get install -y g++
 RUN apt-get install -y yodl
-RUN git clone https://github.com/swig/swig.git
-RUN cd swig && ./autogen.sh && ./configure && make && make install
+RUN git clone https://github.com/swig/swig.git /.swig
+RUN cd /.swig && ./autogen.sh && ./configure && make && make install
 
 # test v8eval
 ADD . $GOPATH/src/github.com/sony/v8eval
-RUN $GOPATH/src/github.com/sony/v8eval/build.sh test
-RUN $GOPATH/src/github.com/sony/v8eval/go/build.sh test
-RUN $GOPATH/src/github.com/sony/v8eval/python/build.sh test
-RUN $GOPATH/src/github.com/sony/v8eval/ruby/build.sh test
+WORKDIR $GOPATH/src/github.com/sony/v8eval
+RUN ./build.sh test
+RUN go/build.sh test
+RUN python/build.sh test
+RUN ruby/build.sh test
