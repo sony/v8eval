@@ -1,2 +1,2 @@
 - service: v8eval
-  command: cd go/example && go build && ./example
+  command: /bin/bash -c "cd $GOPATH/src/github.com/sony/v8eval/go/example && go build && ./example"
