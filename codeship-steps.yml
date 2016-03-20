@@ -1,2 +1,6 @@
 - service: v8eval
   command: /bin/bash -c "cd $GOPATH/src/github.com/sony/v8eval/go/example && go build && ./example"
+- service: v8eval
+  command: /bin/bash -c "cd $GOPATH/src/github.com/sony/v8eval/python/example && python js_add.py"
+- service: v8eval
+  command: /bin/bash -c "cd $GOPATH/src/github.com/sony/v8eval/ruby/example && ruby js_add.rb"
