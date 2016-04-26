@@ -11,6 +11,8 @@ before_install:
   # already installed in travis-ci:
   # - brew install automake
   # - brew install libtool
+  - rvm install 2.1.5
+  - rvm use 2.1.5
 install:
   - go get github.com/stretchr/testify
 script:
