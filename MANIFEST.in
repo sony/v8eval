@@ -3,6 +3,7 @@ include CMakeLists.txt
 include LICENSE
 include README.md
 
+recursive-include python *.i
 recursive-include python *.py
 recursive-include python *.sh
 recursive-include src *
