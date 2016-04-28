@@ -6,7 +6,7 @@
 
 Multi-language bindings to JavaScript engine V8.
 
-Currently v8eval provides Go, Python and Ruby bindings to the latest V8 5.1 and supports Linux and Mac OS X.
+Currently v8eval provides Go, Python and Ruby bindings to the latest V8 5.2 and supports Linux and Mac OS X.
 v8eval uses SWIG and can be extended easily for other languages.
 
 ## Pre-installation
