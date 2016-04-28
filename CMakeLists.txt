@@ -26,7 +26,7 @@ endif(APPLE)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     link_directories(
-        v8/out/x64.release/obj.target/tools/gyp
+        v8/out/x64.release/obj.target/src
         v8/out/x64.release/obj.target/third_party/icu
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
