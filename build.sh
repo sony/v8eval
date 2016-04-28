@@ -53,7 +53,7 @@ install_v8() {
   cd $V8EVAL_ROOT
   fetch v8
   cd v8
-  git checkout 5.1.117
+  git checkout 5.2.163
   CFLAGS="-fPIC" CXXFLAGS="-fPIC" make x64.release -j$NUM_CPU_CORES V=1
 }
 
