@@ -45,7 +45,7 @@ if platform == "linux" or platform == "linux2":
 
     libraries += ['rt']
 
-    library_dirs += [v8_dir + '/out/x64.release/obj.target/tools/gyp',
+    library_dirs += [v8_dir + '/out/x64.release/obj.target/src',
                      v8_dir + '/out/x64.release/obj.target/third_party/icu']
 elif platform == "darwin":
     library_dirs += [v8_dir + '/out/x64.release']

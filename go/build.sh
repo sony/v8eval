@@ -8,7 +8,7 @@ V8EVAL_LIBRARY_PATH="-L$V8EVAL_ROOT/build -L$V8EVAL_ROOT/uv/.libs"
 if [ `uname` = "Darwin" ]; then
   V8EVAL_LIBRARY_PATH="$V8EVAL_LIBRARY_PATH -L$V8EVAL_ROOT/v8/out/x64.release"
 else
-  V8EVAL_LIBRARY_PATH="$V8EVAL_LIBRARY_PATH -L$V8EVAL_ROOT/v8/out/x64.release/obj.target/tools/gyp -L$V8EVAL_ROOT/v8/out/x64.release/obj.target/third_party/icu"
+  V8EVAL_LIBRARY_PATH="$V8EVAL_LIBRARY_PATH -L$V8EVAL_ROOT/v8/out/x64.release/obj.target/src -L$V8EVAL_ROOT/v8/out/x64.release/obj.target/third_party/icu"
 fi
 
 V8EVAL_LIBRARIES="-lv8eval -lv8eval_go -lv8_libplatform -lv8_base -lv8_libbase -lv8_nosnapshot -licui18n -licuuc -licudata -luv"

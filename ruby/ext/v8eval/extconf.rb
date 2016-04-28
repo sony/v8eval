@@ -39,7 +39,7 @@ if RUBY_PLATFORM =~ /darwin/
   ]
 elsif RUBY_PLATFORM =~ /linux/
   lib_dirs += [
-    v8_dir + '/out/x64.release/obj.target/tools/gyp',
+    v8_dir + '/out/x64.release/obj.target/src',
     v8_dir + '/out/x64.release/obj.target/third_party/icu'
   ]
 
