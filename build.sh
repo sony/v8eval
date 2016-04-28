@@ -4,7 +4,7 @@ V8EVAL_ROOT=`cd $(dirname $0) && pwd`
 
 PLATFORM=`uname`
 if [ $PLATFORM = "Linux" ] ; then
-  NUM_CPU_CORES=`cat /proc/cpuinfo | grep cores | grep -o '[0-9]\+'`
+  NUM_CPU_CORES=`cat /proc/cpuinfo | grep cores | grep -o '[0-9]\+' | awk '{total=total+$1}; END{print total}'`
 
   export CC=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang
   export CXX=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang++
