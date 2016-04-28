@@ -54,7 +54,7 @@ install_v8() {
   fetch v8
   cd v8
   git checkout 5.2.163
-  CFLAGS="-fPIC" CXXFLAGS="-fPIC" make x64.release -j$NUM_CPU_CORES V=1
+  CFLAGS="-fPIC -Wno-unknown-warning-option" CXXFLAGS="-fPIC -Wno-unknown-warning-option" make x64.release -j$NUM_CPU_CORES V=1
 }
 
 install_libuv() {
