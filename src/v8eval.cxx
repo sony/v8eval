@@ -1,8 +1,9 @@
 #include "v8eval.h"
 #include "dbgsrv.h"
 
-#include <stdlib.h>
-#include <string.h>
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
 
 #include "libplatform/libplatform.h"
 
@@ -88,12 +89,17 @@ _V8::~_V8() {
   isolate_->Dispose();
 }
 
-v8::Local<v8::Context> _V8::new_context() {
-  if (context_.IsEmpty()) {
+v8::Local<v8::Context> _V8::context() {
+  assert(context_.IsEmpty());
+  return v8::Local<v8::Context>::New(isolate_, context_);
+}
+
+v8::Local<v8::Context> _V8::new_context(v8::Local<v8::ObjectTemplate> global_tmpl, v8::Local<v8::Value> global_obj) {
+  if (global_tmpl.IsEmpty() && global_obj.IsEmpty()) {
     v8::Local<v8::ObjectTemplate> global = v8::ObjectTemplate::New(isolate_);
     return v8::Context::New(isolate_, nullptr, global);
   } else {
-    return v8::Local<v8::Context>::New(isolate_, context_);
+    return v8::Context::New(isolate_, nullptr, global_tmpl, global_obj);
   }
 }
 
@@ -139,7 +145,7 @@ std::string _V8::eval(const std::string& src) {
   v8::Isolate::Scope isolate_scope(isolate_);
   v8::HandleScope handle_scope(isolate_);
 
-  v8::Local<v8::Context> context = new_context();
+  v8::Local<v8::Context> context = this->context();
   v8::Context::Scope context_scope(context);
 
   v8::TryCatch try_catch(isolate_);
@@ -168,7 +174,7 @@ std::string _V8::call(const std::string& func, const std::string& args) {
   v8::Isolate::Scope isolate_scope(isolate_);
   v8::HandleScope handle_scope(isolate_);
 
-  v8::Local<v8::Context> context = new_context();
+  v8::Local<v8::Context> context = this->context();
   v8::Context::Scope context_scope(context);
 
   v8::TryCatch try_catch(isolate_);

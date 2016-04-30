@@ -70,12 +70,17 @@ class _V8 {
   /// connections to remote debuggers to be dropped.
   void disable_debugger();
 
- private:
-  static void debugger_message_handler(const v8::Debug::Message& message);
-  v8::Local<v8::Context> new_context();
+ protected:
+  v8::Local<v8::Context> context();
+  v8::Local<v8::Context> new_context(
+      v8::Local<v8::ObjectTemplate> global_tmpl = v8::Local<v8::ObjectTemplate>(),
+      v8::Local<v8::Value> global_obj = v8::Local<v8::Value>());
   v8::Local<v8::String> new_string(const char* str);
   v8::Local<v8::Value> json_parse(v8::Local<v8::Context> context, v8::Local<v8::String> str);
   v8::Local<v8::String> json_stringify(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
+
+ private:
+  static void debugger_message_handler(const v8::Debug::Message& message);
 
   bool debugger_init(debugger_cb cb, void *cbopq);
   bool debugger_send(const std::string& cmd);
