@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/v8eval.svg)](http://badge.fury.io/py/v8eval)
 [![Gem Version](https://badge.fury.io/rb/v8eval.svg)](https://badge.fury.io/rb/v8eval)
-[![GoDoc](https://godoc.org/github.com/sony/v8eval/go/v8eval?status.png)](http://godoc.org/github.com/sony/v8eval/go/v8eval)
+[![GoDoc](https://godoc.org/github.com/sony/v8eval/go/v8eval?status.svg)](http://godoc.org/github.com/sony/v8eval/go/v8eval)
 
 Multi-language bindings to JavaScript engine V8.
 
