@@ -69,3 +69,6 @@ class V8TestCase(unittest.TestCase):
 
         thread1.join()
         thread2.join()
+
+if __name__ == '__main__':
+    unittest.main()
