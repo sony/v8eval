@@ -3,6 +3,7 @@
 *.so
 /.gclient
 /.gclient_entries
+/.python-version
 /build
 /depot_tools
 /dist
