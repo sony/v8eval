@@ -1,6 +1,6 @@
 Gem::Specification.new 'v8eval', '1.0' do |s|
   s.name = 'v8eval'
-  s.version = '0.2.4'
+  s.version = '0.2.5'
   s.licenses = ['MIT']
   s.description = 'Run JavaScript engine V8 in Ruby'
   s.summary = 'v8eval gem is ruby binding to the latest V8 4.7 and supports

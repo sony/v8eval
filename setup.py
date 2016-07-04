@@ -71,7 +71,7 @@ except ImportError:
 
 # setup v8eval package
 setup(name='v8eval',
-      version='0.2.4',
+      version='0.2.5',
       author='Yoshiyuki Mineo',
       author_email='Yoshiyuki.Mineo@jp.sony.com',
       license='MIT',
