@@ -5,4 +5,4 @@ def add(x, y):
     v8.eval('var add = (x, y) => x + y;')
     return v8.call('add', [x, y])
 
-print add(1, 2)
+print(add(1, 2))

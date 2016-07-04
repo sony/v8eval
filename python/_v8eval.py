@@ -1,5 +1,12 @@
 # the following is appended to swig-generated file including _PythonV8
-import json
+import json, sys
+
+
+PY3 = sys.version_info[0] == 3
+if PY3:
+    string_type = str
+else:
+    string_type = basestring
 
 
 class V8Error(Exception):
@@ -35,7 +42,7 @@ class V8:
 
             V8Error: If some JavaScript exception happens.
         """
-        if not isinstance(src, basestring):
+        if not isinstance(src, string_type):
             raise TypeError('source code not string')
 
         res = self._v8.eval(src)
@@ -64,7 +71,7 @@ class V8:
 
             V8Error: If some JavaScript exception happens.
         """
-        if not isinstance(func, basestring):
+        if not isinstance(func, string_type):
             raise TypeError('function name not string')
         if not isinstance(args, list):
             raise TypeError('arguments not list')

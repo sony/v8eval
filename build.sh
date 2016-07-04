@@ -3,7 +3,7 @@
 V8EVAL_ROOT=`cd $(dirname $0) && pwd`
 
 PLATFORM=`uname`
-if [ $PLATFORM = "Linux" ] ; then
+if [ $PLATFORM = "Linux" ]; then
   NUM_CPU_CORES=`cat /proc/cpuinfo | grep cores | grep -o '[0-9]\+' | awk '{total=total+$1}; END{print total}'`
 
   export CC=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang
@@ -50,11 +50,24 @@ install_v8() {
     return 0
   fi
 
+  PY_VER=`python -c 'import sys; print(sys.version_info[0])'`
+  if [ $PY_VER = 3 ]; then
+    OLD_PATH=$PATH
+    export PATH=$V8EVAL_ROOT/python/bin:$PATH
+  fi
+
   cd $V8EVAL_ROOT
   fetch v8
   cd v8
   git checkout 5.2.163
+  if [ $PY_VER = 3 ]; then
+    sed -i -e 's/python -c/python2 -c/' Makefile
+  fi
   CFLAGS="-fPIC -Wno-unknown-warning-option" CXXFLAGS="-fPIC -Wno-unknown-warning-option" make x64.release -j$NUM_CPU_CORES V=1
+
+  if [ $PY_VER = 3 ]; then
+    export PATH=$OLD_PATH
+  fi
 }
 
 install_libuv() {
