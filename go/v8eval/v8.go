@@ -3,6 +3,7 @@ package v8eval
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"runtime"
 	"strings"
 )
@@ -105,8 +106,6 @@ func (v *v8) decode(str string, val interface{}) error {
 	return nil
 }
 
-<<<<<<< 5f68c83265f4f85a003a64cf75a6ae44db62c169
-=======
 func (v *v8) Eval(src string, res interface{}) error {
 	return v.decode(v.xV8.Eval(src), res)
 }
@@ -126,7 +125,6 @@ func (v *v8) GetHeapInformation() *IsolateHeapInfo {
 	return &IsolateHeapInfo{TotalAvailableSize: infoMap.Get("total_available_size"), TotalHeapSize: infoMap.Get("total_heap_size"), UsedHeapSize: infoMap.Get("used_heap_size")}
 }
 
->>>>>>> attempt to expose isolate heap information
 func (v *v8) EnableDebugger(port int) error {
 	if !v.xV8.Enable_debugger(port) {
 		return errors.New("failed to start debug server")
