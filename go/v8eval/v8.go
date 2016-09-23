@@ -3,11 +3,7 @@ package v8eval
 import (
 	"encoding/json"
 	"errors"
-<<<<<<< ce1743e1ad74cdc39e3d425638f9ec94292038be
 	"runtime"
-=======
-	"fmt"
->>>>>>> first attempt at adding flag functionality
 	"strings"
 )
 
