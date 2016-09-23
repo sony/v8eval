@@ -46,6 +46,7 @@ func NewV8() V8 {
 }
 
 func deleteV8(v *v8) {
+
 	DeleteX_GoV8(v.xV8)
 	v.xV8 = nil
 }
