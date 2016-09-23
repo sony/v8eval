@@ -31,6 +31,11 @@ type V8 interface {
 
 	// DisableDebugger stops the debug server, if running.
 	DisableDebugger()
+
+	// Tear down takes the V8 instance and tells the V8 engine to deallocate
+	// all of the resources allocated to it
+	// Do not try and use this V8 instance after calling teardown
+	TearDown()
 }
 
 type v8 struct {
@@ -91,4 +96,9 @@ func (v *v8) EnableDebugger(port int) error {
 
 func (v *v8) DisableDebugger() {
 	v.xV8.Disable_debugger()
+}
+
+func (v *v8) TearDown() {
+	DeleteX_GoV8(v.xV8)
+	v.xV8 = nil
 }
