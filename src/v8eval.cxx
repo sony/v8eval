@@ -9,6 +9,7 @@
 
 namespace v8eval {
 
+<<<<<<< 7930f14cfa241218f2185f19e2b2ed812f287fff
 using v8::HeapStatistics;
 
 static v8::Platform* platform = nullptr;
