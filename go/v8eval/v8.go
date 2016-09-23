@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"runtime"
 	"strings"
 )
 
@@ -66,26 +65,7 @@ func SetFlag(flagName string, value interface{}) {
 func NewV8() V8 {
 	v := new(v8)
 	v.xV8 = NewX_GoV8()
-	runtime.SetFinalizer(v, deleteV8)
 	return v
-}
-
-func deleteV8(v *v8) {
-	DeleteX_GoV8(v.xV8)
-	v.xV8 = nil
-}
-
-func (v *v8) Eval(src string, res interface{}) error {
-	return v.decode(v.xV8.Eval(src), res)
-}
-
-func (v *v8) Call(fun string, args interface{}, res interface{}) error {
-	as, err := json.Marshal(args)
-	if err != nil {
-		return err
-	}
-
-	return v.decode(v.xV8.Call(fun, string(as)), res)
 }
 
 func (v *v8) decode(str string, val interface{}) error {
