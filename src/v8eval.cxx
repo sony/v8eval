@@ -161,7 +161,12 @@ std::string _V8::eval(const std::string& src) {
   } else {
     v8::Local<v8::Value> result;
     if (!script->Run(context).ToLocal(&result)) {
-      return to_std_string(try_catch.Exception());
+      v8::Local<v8::Value> stack;
+      if (!try_catch.StackTrace(context).ToLocal(&stack)) {
+        return to_std_string(try_catch.Exception());
+      } else {
+        return to_std_string(stack);
+      }
     } else {
       return to_std_string(json_stringify(context, result));
     }
