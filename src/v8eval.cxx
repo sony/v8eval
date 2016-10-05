@@ -4,7 +4,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
-#include <map>
 
 #include "libplatform/libplatform.h"
 
@@ -215,17 +214,14 @@ std::string _V8::call(const std::string& func, const std::string& args) {
 }
 
 
-std::map<string,size_t> _V8::get_heap_statistics() {
+void _V8::get_heap_statistics(std::map<std::string,unsigned long long> &heap_stats) {
   // V8 memory usage
-  std::map <string,size_t> heap_stats
   HeapStatistics v8_heap_stats;
   isolate_->GetHeapStatistics(&v8_heap_stats);
 
-  heap_stats["total_heap_size"] = v8_heap_stats.total_heap_size()
-  heap_stats["total_available_size"] = v8_heap_stats.total_available_size()
-  heap_stats["used_heap_size"] = v8_heap_stats.used_heap_size()
-
-  return heap_stats
+  heap_stats["total_heap_size"] = v8_heap_stats.total_heap_size();
+  heap_stats["total_available_size"] = v8_heap_stats.total_available_size();
+  heap_stats["used_heap_size"] = v8_heap_stats.used_heap_size();
 }
 
 bool _V8::enable_debugger(int port) {

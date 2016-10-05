@@ -43,9 +43,9 @@ type v8 struct {
 }
 
 type IsolateHeapInfo struct {
-	TotalAvailableSize int
-	TotalHeapSize      int
-	UsedHeapSize       int
+	TotalAvailableSize uint64
+	TotalHeapSize      uint64
+	UsedHeapSize       uint64
 }
 
 // SetFlag sets a flag in the v8 engine and must be called before `Initialize()`
@@ -118,8 +118,9 @@ func (v *v8) Call(fun string, args interface{}, res interface{}) error {
 }
 
 func (v *v8) GetHeapInformation() *IsolateHeapInfo {
-	var infoMap map[string]int = v.xV8.Get_heap_statistics()
-	return &IsolateHeapInfo{TotalAvailableSize: infoMap["total_available_size"], TotalHeapSize: infoMap["total_heap_size"], UsedHeapSize: infoMap["used_heap_size"]}
+	infoMap := NewMapStringUint()
+	v.xV8.Get_heap_statistics(infoMap)
+	return &IsolateHeapInfo{TotalAvailableSize: infoMap.Get("total_available_size"), TotalHeapSize: infoMap.Get("total_heap_size"), UsedHeapSize: infoMap.Get("used_heap_size")}
 }
 
 >>>>>>> attempt to expose isolate heap information
