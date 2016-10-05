@@ -221,6 +221,7 @@ void _V8::get_heap_statistics(std::map<std::string,unsigned long long> &heap_sta
 
   heap_stats["total_heap_size"] = v8_heap_stats.total_heap_size();
   heap_stats["total_available_size"] = v8_heap_stats.total_available_size();
+  heap_stats["total_physical_size"] = v8_heap_stats.total_physical_size();
   heap_stats["used_heap_size"] = v8_heap_stats.used_heap_size();
 }
 

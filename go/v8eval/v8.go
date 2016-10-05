@@ -46,6 +46,7 @@ type v8 struct {
 }
 
 type IsolateHeapInfo struct {
+	TotalPhysicalSize  uint64
 	TotalAvailableSize uint64
 	TotalHeapSize      uint64
 	UsedHeapSize       uint64
@@ -123,7 +124,10 @@ func (v *v8) Call(fun string, args interface{}, res interface{}) error {
 func (v *v8) GetHeapInformation() *IsolateHeapInfo {
 	infoMap := NewMapStringUint()
 	v.xV8.Get_heap_statistics(infoMap)
-	return &IsolateHeapInfo{TotalAvailableSize: infoMap.Get("total_available_size"), TotalHeapSize: infoMap.Get("total_heap_size"), UsedHeapSize: infoMap.Get("used_heap_size")}
+	return &IsolateHeapInfo{TotalAvailableSize: infoMap.Get("total_available_size"),
+		TotalHeapSize:     infoMap.Get("total_heap_size"),
+		UsedHeapSize:      infoMap.Get("used_heap_size"),
+		TotalPhysicalSize: infoMap.Get("total_physical_size")}
 }
 
 >>>>>>> attempt to expose isolate heap information
