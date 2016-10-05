@@ -100,14 +100,9 @@ func (v *v8) Call(fun string, args interface{}, res interface{}) error {
 }
 
 func (v *v8) GetHeapInformation() *IsolateHeapInfo {
-<<<<<<< 5a93c6fcbe4b065737be25fc01ebb4d56b1670a9
 	infoMap := NewMapStringUint()
 	v.xV8.Get_heap_statistics(infoMap)
 	return &IsolateHeapInfo{TotalAvailableSize: infoMap.Get("total_available_size"), TotalHeapSize: infoMap.Get("total_heap_size"), UsedHeapSize: infoMap.Get("used_heap_size")}
-=======
-	var infoMap map[string]int = v.xV8.Get_heap_statistics()
-	return &IsolateHeapInfo{TotalAvailableSize: infoMap["total_available_size"], TotalHeapSize: infoMap["total_heap_size"], UsedHeapSize: infoMap["used_heap_size"]}
->>>>>>> attempt to expose isolate heap information
 }
 
 func (v *v8) EnableDebugger(port int) error {
