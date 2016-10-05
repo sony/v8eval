@@ -24,6 +24,9 @@ type V8 interface {
 	// If some JavaScript exception happens in runtime, Call returns the exception as a Go error.
 	Call(fun string, args interface{}, res interface{}) error
 
+	// GetHeapInformation returns back information on the current heap information that v8 is using
+	GetHeapInformation() *IsolateHeapInfo
+
 	// EnableDebugger starts a debug server associated with the V8 instance.
 	// The server will listen on the given TCP/IP port.
 	// If failing to start the server, EnableDebugger returns the error.
