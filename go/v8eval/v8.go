@@ -43,6 +43,19 @@ func NewV8() V8 {
 	return v
 }
 
+func (v *v8) Eval(src string, res interface{}) error {
+	return v.decode(v.xV8.Eval(src), res)
+}
+
+func (v *v8) Call(fun string, args interface{}, res interface{}) error {
+	as, err := json.Marshal(args)
+	if err != nil {
+		return err
+	}
+
+	return v.decode(v.xV8.Call(fun, string(as)), res)
+}
+
 func (v *v8) decode(str string, val interface{}) error {
 	if str == "undefined" {
 		return nil
@@ -59,19 +72,6 @@ func (v *v8) decode(str string, val interface{}) error {
 	}
 
 	return nil
-}
-
-func (v *v8) Eval(src string, res interface{}) error {
-	return v.decode(v.xV8.Eval(src), res)
-}
-
-func (v *v8) Call(fun string, args interface{}, res interface{}) error {
-	as, err := json.Marshal(args)
-	if err != nil {
-		return err
-	}
-
-	return v.decode(v.xV8.Call(fun, string(as)), res)
 }
 
 func (v *v8) EnableDebugger(port int) error {
