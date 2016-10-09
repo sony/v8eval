@@ -13,6 +13,11 @@ class DbgSrv;
 
 typedef void (*debugger_cb)(std::string&, void *opq);
 
+/// \brief Set the given V8 flags
+///
+/// This method sets the given V8 flags.
+void set_flags(const std::string& flags);
+
 /// \brief Initialize the V8 runtime environment
 /// \return success or not as boolean
 ///

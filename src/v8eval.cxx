@@ -11,6 +11,10 @@ namespace v8eval {
 
 static v8::Platform* platform = nullptr;
 
+void set_flags(const std::string& flags) {
+  v8::V8::SetFlagsFromString(flags.c_str(), static_cast<int>(flags.length()));
+}
+
 bool initialize() {
   if (platform) {
     return false;
