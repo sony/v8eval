@@ -6,6 +6,7 @@ import (
 	"github.com/sony/v8eval/go/v8eval"
 )
 
+// Add returns the sum of the given integers.
 func Add(x, y int) int {
 	var v8 = v8eval.NewV8()
 	v8.Eval("var add = (x, y) => x + y;", nil)
