@@ -3,6 +3,7 @@ package v8eval
 import (
 	"encoding/json"
 	"errors"
+	"runtime"
 	"strings"
 )
 
@@ -40,7 +41,13 @@ type v8 struct {
 func NewV8() V8 {
 	v := new(v8)
 	v.xV8 = NewX_GoV8()
+	runtime.SetFinalizer(v, deleteV8)
 	return v
+}
+
+func deleteV8(v *v8) {
+	DeleteX_GoV8(v.xV8)
+	v.xV8 = nil
 }
 
 func (v *v8) Eval(src string, res interface{}) error {
