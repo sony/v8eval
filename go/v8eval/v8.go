@@ -3,6 +3,7 @@ package v8eval
 import (
 	"encoding/json"
 	"errors"
+	"runtime"
 	"strings"
 )
 
@@ -33,28 +34,31 @@ type V8 interface {
 
 	// DisableDebugger stops the debug server, if running.
 	DisableDebugger()
-
-	// Tear down takes the V8 instance and tells the V8 engine to deallocate
-	// all of the resources allocated to it
-	// Do not try and use this V8 instance after calling teardown
-	TearDown()
 }
 
 type v8 struct {
 	xV8 X_GoV8
 }
 
-type IsolateHeapInfo struct {
-	TotalAvailableSize uint64
-	TotalHeapSize      uint64
-	UsedHeapSize       uint64
-}
-
 // NewV8 creates a new V8 instance.
 func NewV8() V8 {
 	v := new(v8)
 	v.xV8 = NewX_GoV8()
+	runtime.SetFinalizer(v, deleteV8)
 	return v
+}
+
+func (v *v8) Eval(src string, res interface{}) error {
+	return v.decode(v.xV8.Eval(src), res)
+}
+
+func (v *v8) Call(fun string, args interface{}, res interface{}) error {
+	as, err := json.Marshal(args)
+	if err != nil {
+		return err
+	}
+
+	return v.decode(v.xV8.Call(fun, string(as)), res)
 }
 
 func (v *v8) decode(str string, val interface{}) error {
@@ -75,17 +79,10 @@ func (v *v8) decode(str string, val interface{}) error {
 	return nil
 }
 
-func (v *v8) Eval(src string, res interface{}) error {
-	return v.decode(v.xV8.Eval(src), res)
-}
-
-func (v *v8) Call(fun string, args interface{}, res interface{}) error {
-	as, err := json.Marshal(args)
-	if err != nil {
-		return err
-	}
-
-	return v.decode(v.xV8.Call(fun, string(as)), res)
+type IsolateHeapInfo struct {
+	TotalAvailableSize uint64
+	TotalHeapSize      uint64
+	UsedHeapSize       uint64
 }
 
 func (v *v8) GetHeapInformation() *IsolateHeapInfo {
@@ -104,9 +101,4 @@ func (v *v8) EnableDebugger(port int) error {
 
 func (v *v8) DisableDebugger() {
 	v.xV8.Disable_debugger()
-}
-
-func (v *v8) TearDown() {
-	DeleteX_GoV8(v.xV8)
-	v.xV8 = nil
 }
