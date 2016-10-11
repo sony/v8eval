@@ -3,7 +3,6 @@ package v8eval
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -49,16 +48,6 @@ type IsolateHeapInfo struct {
 	TotalAvailableSize uint64
 	TotalHeapSize      uint64
 	UsedHeapSize       uint64
-}
-
-// SetFlag sets a flag in the v8 engine and must be called before `Initialize()`
-// i.e.: "expose_gc" or "max_old_space_size"
-func SetFlag(flagName string, value interface{}) {
-	flagString := fmt.Sprintf("--%s", flagName)
-	if value != nil {
-		flagString = fmt.Sprintf("%s=%+v", flagString, value)
-	}
-	SetV8Flag(flagString)
 }
 
 // NewV8 creates a new V8 instance.
