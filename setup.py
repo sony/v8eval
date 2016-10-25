@@ -31,12 +31,12 @@ library_dirs = [v8eval_root + '/build', uv_dir + '/.libs']
 libraries=['v8eval',
            'v8eval_python',
            'v8_libplatform',
+           'v8_libsampler',
            'v8_base',
            'v8_libbase',
            'v8_nosnapshot',
            'icui18n',
            'icuuc',
-           'icudata',
            'uv']
 
 if platform == "linux" or platform == "linux2":
