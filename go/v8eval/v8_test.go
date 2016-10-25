@@ -32,7 +32,7 @@ func TestEval(t *testing.T) {
 
 	err := v8.Eval("foo", nil)
 	assert.NotNil(t, err)
-	assert.Equal(t, "ReferenceError: foo is not defined", err.Error())
+	assert.Equal(t, "ReferenceError: foo is not defined\n    at v8eval:1:1", err.Error())
 
 	var s string
 	err = v8.Eval("1", &s)
