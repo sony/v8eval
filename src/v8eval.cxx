@@ -259,7 +259,7 @@ bool _V8::debugger_init(debugger_cb cb, void *cbopq) {
   v8::Locker locker(isolate_);
   v8::Isolate::Scope isolate_scope(isolate_);
   v8::HandleScope handle_scope(isolate_);
-  v8::Debug::SetMessageHandler(debugger_message_handler);
+  v8::Debug::SetMessageHandler(isolate_, debugger_message_handler);
 
   return true;
 }
@@ -270,7 +270,7 @@ void _V8::debugger_process() {
   v8::Isolate::Scope isolate_scope(isolate_);
   v8::HandleScope handle_scope(isolate_);
 
-  v8::Debug::ProcessDebugMessages();
+  v8::Debug::ProcessDebugMessages(isolate_);
 }
 
 bool _V8::debugger_send(const std::string& cmd) {
@@ -292,7 +292,7 @@ void _V8::debugger_stop() {
   v8::Locker locker(isolate_);
   v8::Isolate::Scope isolate_scope(isolate_);
   v8::HandleScope handle_scope(isolate_);
-  v8::Debug::SetMessageHandler(nullptr);
+  v8::Debug::SetMessageHandler(isolate_, nullptr);
 
   callback_ = nullptr;
   callback_opq_ = nullptr;
