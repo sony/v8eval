@@ -17,8 +17,6 @@ set(v8eval-linklibs
     v8_base
     v8_libbase
     v8_nosnapshot
-    icui18n
-    icuuc
     uv
     gtest
     gtest_main

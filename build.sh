@@ -63,7 +63,7 @@ install_v8() {
   if [ $PY_VER = 3 ]; then
     sed -i -e 's/python -c/python2 -c/' Makefile
   fi
-  CFLAGS="-fPIC -Wno-unknown-warning-option" CXXFLAGS="-fPIC -Wno-unknown-warning-option" make x64.release -j$NUM_CPU_CORES V=1
+  CFLAGS="-fPIC -Wno-unknown-warning-option" CXXFLAGS="-fPIC -Wno-unknown-warning-option" make x64.release -j$NUM_CPU_CORES i18nsupport=off V=1
 
   if [ $PY_VER = 3 ]; then
     export PATH=$OLD_PATH

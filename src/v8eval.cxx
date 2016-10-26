@@ -20,10 +20,6 @@ bool initialize() {
     return false;
   }
 
-  if (!v8::V8::InitializeICU()) {
-    return false;
-  }
-
   platform = v8::platform::CreateDefaultPlatform();
   v8::V8::InitializePlatform(platform);
 

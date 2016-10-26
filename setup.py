@@ -35,8 +35,6 @@ libraries=['v8eval',
            'v8_base',
            'v8_libbase',
            'v8_nosnapshot',
-           'icui18n',
-           'icuuc',
            'uv']
 
 if platform == "linux" or platform == "linux2":
@@ -45,8 +43,7 @@ if platform == "linux" or platform == "linux2":
 
     libraries += ['rt']
 
-    library_dirs += [v8_dir + '/out/x64.release/obj.target/src',
-                     v8_dir + '/out/x64.release/obj.target/third_party/icu']
+    library_dirs += [v8_dir + '/out/x64.release/obj.target/src']
 elif platform == "darwin":
     library_dirs += [v8_dir + '/out/x64.release']
 

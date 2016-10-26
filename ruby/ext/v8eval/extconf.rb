@@ -39,8 +39,7 @@ if RUBY_PLATFORM =~ /darwin/
   ]
 elsif RUBY_PLATFORM =~ /linux/
   lib_dirs += [
-    v8_dir + '/out/x64.release/obj.target/src',
-    v8_dir + '/out/x64.release/obj.target/third_party/icu'
+    v8_dir + '/out/x64.release/obj.target/src'
   ]
 
   RbConfig::MAKEFILE_CONFIG['CC'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
@@ -49,7 +48,7 @@ end
 
 dir_config('', header_dirs, lib_dirs)
 
-$LDFLAGS << ' -lv8eval -lv8eval_ruby -lv8_libplatform -lv8_libsampler -lv8_base -lv8_libbase -lv8_nosnapshot -licui18n -licuuc -luv'
+$LDFLAGS << ' -lv8eval -lv8eval_ruby -lv8_libplatform -lv8_libsampler -lv8_base -lv8_libbase -lv8_nosnapshot -luv'
 $CPPFLAGS << ' -g -O3 -std=c++11'
 
 create_makefile('v8eval/v8eval')
