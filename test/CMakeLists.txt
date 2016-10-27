@@ -13,9 +13,9 @@ set_target_properties(v8eval-test PROPERTIES
 set(v8eval-linklibs
     v8eval
     v8_libplatform
-    v8_libsampler
     v8_base
     v8_libbase
+    v8_libsampler
     v8_nosnapshot
     uv
     gtest

@@ -11,7 +11,7 @@ else
   V8EVAL_LIBRARY_PATH="$V8EVAL_LIBRARY_PATH -L$V8EVAL_ROOT/v8/out/x64.release/obj.target/src"
 fi
 
-V8EVAL_LIBRARIES="-lv8eval -lv8eval_go -lv8_libplatform -lv8_libsampler -lv8_base -lv8_libbase -lv8_nosnapshot -luv"
+V8EVAL_LIBRARIES="-lv8eval -lv8eval_go -lv8_libplatform -lv8_base -lv8_libbase -lv8_libsampler -lv8_nosnapshot -luv"
 if [ `uname` = "Linux" ] ; then
   V8EVAL_LIBRARIES="$V8EVAL_LIBRARIES -ldl -lpthread -lrt"
 fi
