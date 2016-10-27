@@ -2,6 +2,7 @@ package v8eval
 
 import (
 	"runtime"
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -106,4 +107,30 @@ func TestInParallel(t *testing.T) {
 		x := <-ch
 		assert.Equal(t, numRepeat, x)
 	}
+}
+
+func TestHeap(t *testing.T) {
+	v8 := NewV8()
+
+	var heap map[string]int
+	assert.Equal(t, nil, v8.Eval("heap()", &heap))
+
+	ks := []string{}
+	for k := range heap {
+		ks = append(ks, k)
+	}
+	sort.Strings(ks)
+
+	expected := []string{
+		"doesZapGarbage",
+		"heapSizeLimit",
+		"mallocedMemory",
+		"peakMallocedMemory",
+		"totalAvailableSize",
+		"totalHeapSize",
+		"totalHeapSizeExecutable",
+		"totalPhysicalSize",
+		"usedHeapSize",
+	}
+	assert.Equal(t, expected, ks)
 }
