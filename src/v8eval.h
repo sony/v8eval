@@ -76,6 +76,8 @@ class _V8 {
   void disable_debugger();
 
  protected:
+  void enable_heap_report();
+
   v8::Local<v8::Context> context();
   v8::Local<v8::Context> new_context(
       v8::Local<v8::ObjectTemplate> global_tmpl = v8::Local<v8::ObjectTemplate>(),
