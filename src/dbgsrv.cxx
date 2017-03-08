@@ -172,7 +172,7 @@ bool DbgSrv::start(int port) {
 
   // Set up the TCP Connection.
   uv_tcp_init(&dbgsrv_loop_, &dbgsrv_serv_);
-  uv_ip4_addr("127.0.0.1", port, &addr);
+  uv_ip4_addr("0.0.0.0", port, &addr);
   if (uv_tcp_bind(&dbgsrv_serv_, (const struct sockaddr*)&addr, 0)) {
     uv_close((uv_handle_t *)&dbgsrv_serv_, NULL);
     perror("bind");

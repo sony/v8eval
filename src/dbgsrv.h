@@ -23,6 +23,7 @@ class DbgSrv {
   /// \param port TCP/IP port the server will listen
   /// \return success or not as boolean
   ///
+  /// The debugger server gets bound to 0.0.0.0:[port].
   /// The port can be set to 0 to have a port automatically assigned.
   bool start(int port);
 
