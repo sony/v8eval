@@ -59,7 +59,7 @@ install_v8() {
   cd $V8EVAL_ROOT
   fetch v8
   cd v8
-  git checkout 5.6.142
+  git checkout 5.9.27
   if [ $PY_VER = 3 ]; then
     sed -i -e 's/python -c/python2 -c/' Makefile
   fi
