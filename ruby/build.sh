@@ -24,7 +24,7 @@ docs() {
 test() {
   build
 
-  gem install bundle
+  gem install bundler -v 1.14.5
   cd $V8EVAL_ROOT/ruby
   bundle install
 

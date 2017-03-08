@@ -19,8 +19,8 @@ RUN pyenv install $PYVER
 RUN pyenv global $PYVER
 
 # install rbenv and ruby-build
-RUN git clone https://github.com/sstephenson/rbenv.git /usr/local/rbenv
-RUN git clone https://github.com/sstephenson/ruby-build.git /usr/local/rbenv/plugins/ruby-build
+RUN git clone -b v1.0.0 https://github.com/sstephenson/rbenv.git /usr/local/rbenv
+RUN git clone -b v20160602 https://github.com/sstephenson/ruby-build.git /usr/local/rbenv/plugins/ruby-build
 ENV RBENV_ROOT /usr/local/rbenv
 ENV PATH $RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH
 
@@ -28,6 +28,7 @@ ENV PATH $RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH
 ENV RBVER 2.2.3
 RUN rbenv install $RBVER
 RUN rbenv global $RBVER
+ENV PATH $RBENV_ROOT/versions/$RBVER/bin:$PATH
 
 # install cmake
 RUN apt-get install -y cmake
