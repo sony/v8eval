@@ -2,6 +2,7 @@
 #define V8EVAL_H_
 
 #include <string>
+#include <map>
 
 #include "v8.h"
 #include "v8-debug.h"
@@ -57,6 +58,11 @@ class _V8 {
   /// and returns the result in JSON.
   /// If some JavaScript exception happens in runtime, the exception message is returned.
   std::string call(const std::string& func, const std::string& args);
+
+  /// |brief returns heap information for the current V8 isolate
+  /// |return returns a map where the keys are `total_heap_size`, `total_available_size`, and `used_heap_size`
+  /// This method returns a map with the isolate heap memory info. The values for each key is a number of bytes
+  void get_heap_statistics(std::map<std::string,unsigned long long> &heap_stats);
 
   /// \brief Start a debug server associated with the V8 instance
   /// \param port The TCP/IP port the debugger will listen, at localhost
