@@ -9,6 +9,8 @@
 
 namespace v8eval {
 
+using v8::HeapStatistics;
+
 static v8::Platform* platform = nullptr;
 
 void set_flags(const std::string& flags) {
@@ -205,6 +207,17 @@ std::string _V8::call(const std::string& func, const std::string& args) {
   } else {
     return to_std_string(json_stringify(context, result));
   }
+}
+
+
+void _V8::get_heap_statistics(std::map<std::string,unsigned long long> &heap_stats) {
+  // V8 memory usage
+  HeapStatistics v8_heap_stats;
+  isolate_->GetHeapStatistics(&v8_heap_stats);
+
+  heap_stats["total_heap_size"] = v8_heap_stats.total_heap_size();
+  heap_stats["total_available_size"] = v8_heap_stats.total_available_size();
+  heap_stats["used_heap_size"] = v8_heap_stats.used_heap_size();
 }
 
 bool _V8::enable_debugger(int port) {

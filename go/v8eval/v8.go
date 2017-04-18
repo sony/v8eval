@@ -24,6 +24,9 @@ type V8 interface {
 	// If some JavaScript exception happens in runtime, Call returns the exception as a Go error.
 	Call(fun string, args interface{}, res interface{}) error
 
+	// GetHeapInformation returns back information on the current heap information that v8 is using
+	GetHeapInformation() *IsolateHeapInfo
+
 	// EnableDebugger starts a debug server associated with the V8 instance.
 	// The server will listen on the given TCP/IP port.
 	// If failing to start the server, EnableDebugger returns the error.
@@ -43,11 +46,6 @@ func NewV8() V8 {
 	v.xV8 = NewX_GoV8()
 	runtime.SetFinalizer(v, deleteV8)
 	return v
-}
-
-func deleteV8(v *v8) {
-	DeleteX_GoV8(v.xV8)
-	v.xV8 = nil
 }
 
 func (v *v8) Eval(src string, res interface{}) error {
@@ -79,6 +77,18 @@ func (v *v8) decode(str string, val interface{}) error {
 	}
 
 	return nil
+}
+
+type IsolateHeapInfo struct {
+	TotalAvailableSize uint64
+	TotalHeapSize      uint64
+	UsedHeapSize       uint64
+}
+
+func (v *v8) GetHeapInformation() *IsolateHeapInfo {
+	infoMap := NewMapStringUint()
+	v.xV8.Get_heap_statistics(infoMap)
+	return &IsolateHeapInfo{TotalAvailableSize: infoMap.Get("total_available_size"), TotalHeapSize: infoMap.Get("total_heap_size"), UsedHeapSize: infoMap.Get("used_heap_size")}
 }
 
 func (v *v8) EnableDebugger(port int) error {
