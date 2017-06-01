@@ -60,6 +60,7 @@ install_v8() {
   fetch v8
   cd v8
   git checkout 6.0.42
+  cd buildtools && git checkout 57c94085e893cd46aa1c5ad4ee9d7ee4670312a6 && cd ..
   if [ $PY_VER = 3 ]; then
     sed -i -e 's/python -c/python2 -c/' Makefile
   fi
