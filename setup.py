@@ -24,6 +24,8 @@ system("cp " + v8eval_root + "/src/v8eval_python.h " + py_v8eval_dir)
 system("swig -c++ -python -outdir " + py_v8eval_dir + " -o "  + py_v8eval_dir + "/v8eval_wrap.cxx " + py_v8eval_dir + "/v8eval.i")
 system("cat " + py_dir + "/_v8eval.py >> " + py_v8eval_dir + "/v8eval.py")
 
+# workaround
+system("mkdir " + v8_dir + "/buildtools/third_party/libc++/trunk/test/std/experimental/filesystem/Inputs/static_test_env/dne")
 
 # build _v8eval.so
 include_dirs = [v8_dir, v8_dir + '/include', uv_dir + '/include']
