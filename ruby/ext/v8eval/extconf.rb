@@ -48,7 +48,7 @@ end
 
 dir_config('', header_dirs, lib_dirs)
 
-$LDFLAGS << ' -lv8eval -lv8eval_ruby -lv8_libplatform -lv8_base -lv8_libbase -lv8_libsampler -lv8_nosnapshot -luv'
+$LDFLAGS << ' -lv8eval -lv8eval_ruby -lv8_libplatform -lv8_base -lv8_libbase -lv8_libsampler -lv8_init -lv8_initializers -lv8_nosnapshot -luv'
 $CPPFLAGS << ' -g -O3 -std=c++11'
 
 create_makefile('v8eval/v8eval')

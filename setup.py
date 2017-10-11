@@ -34,6 +34,8 @@ libraries=['v8eval',
            'v8_base',
            'v8_libbase',
            'v8_libsampler',
+           'v8_init',
+           'v8_initializers',
            'v8_nosnapshot',
            'uv']
 

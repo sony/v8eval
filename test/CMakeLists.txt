@@ -16,6 +16,8 @@ set(v8eval-linklibs
     v8_base
     v8_libbase
     v8_libsampler
+    v8_init
+    v8_initializers
     v8_nosnapshot
     uv
     gtest
@@ -26,6 +28,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(v8eval-linklibs
         ${v8eval-linklibs}
         dl
+        rt
         pthread
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
