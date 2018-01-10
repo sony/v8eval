@@ -95,6 +95,9 @@ build() {
   cd build
   cmake -DCMAKE_BUILD_TYPE=Release -DV8EVAL_TEST=OFF ..
   make VERBOSE=1
+
+  cd $V8EVAL_ROOT
+  rm -rf old_v8_tools_luci-go.git
 }
 
 docs() {
