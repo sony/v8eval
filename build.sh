@@ -1,14 +1,14 @@
 #!/bin/sh
 
-V8EVAL_ROOT=`cd $(dirname $0) && pwd`
+V8EVAL_ROOT=`cd $(dirname ${0}) && pwd`
 
 PLATFORM=`uname`
-if [ $PLATFORM = "Linux" ]; then
+if [ ${PLATFORM} = "Linux" ]; then
   NUM_CPU_CORES=`cat /proc/cpuinfo | grep cores | grep -o '[0-9]\+' | awk '{total=total+$1}; END{print total}'`
 
-  export CC=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang
-  export CXX=$V8EVAL_ROOT/v8/third_party/llvm-build/Release+Asserts/bin/clang++
-elif [ $PLATFORM = "Darwin" ]; then
+  export CC=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang
+  export CXX=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang++
+elif [ ${PLATFORM} = "Darwin" ]; then
   NUM_CPU_CORES=`sysctl -n hw.ncpu`
 
   export CC=`which clang`
@@ -26,57 +26,57 @@ else
 fi
 
 install_depot_tools() {
-  export PATH=$V8EVAL_ROOT/depot_tools:$PATH
-  if [ -d $V8EVAL_ROOT/depot_tools ]; then
+  export PATH=${V8EVAL_ROOT}/depot_tools:${PATH}
+  if [ -d ${V8EVAL_ROOT}/depot_tools ]; then
     return 0
   fi
 
-  cd $V8EVAL_ROOT
+  cd ${V8EVAL_ROOT}
   git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 }
 
 install_googletest() {
-  if [ -d $V8EVAL_ROOT/test/googletest ]; then
+  if [ -d ${V8EVAL_ROOT}/test/googletest ]; then
     return 0
   fi
 
-  cd $V8EVAL_ROOT/test
+  cd ${V8EVAL_ROOT}/test
   git clone https://github.com/google/googletest.git
   git checkout release-1.7.0
 }
 
 install_v8() {
-  if [ -d $V8EVAL_ROOT/v8 ]; then
+  if [ -d ${V8EVAL_ROOT}/v8 ]; then
     return 0
   fi
 
   PY_VER=`python -c 'import sys; print(sys.version_info[0])'`
-  if [ $PY_VER = 3 ]; then
-    OLD_PATH=$PATH
-    export PATH=$V8EVAL_ROOT/python/bin:$PATH
+  if [ ${PY_VER} = 3 ]; then
+    OLD_PATH=${PATH}
+    export PATH=${V8EVAL_ROOT}/python/bin:${PATH}
   fi
 
-  cd $V8EVAL_ROOT
+  cd ${V8EVAL_ROOT}
   fetch v8
   cd v8
   git checkout 6.3.288
   gclient sync
-  if [ $PY_VER = 3 ]; then
+  if [ ${PY_VER} = 3 ]; then
     sed -i -e 's/python -c/python2 -c/' Makefile
   fi
-  CFLAGS="-fPIC -Wno-unknown-warning-option" CXXFLAGS="-fPIC -Wno-unknown-warning-option" make x64.release -j$NUM_CPU_CORES i18nsupport=off V=1
+  CFLAGS="-fPIC -Wno-unknown-warning-option" CXXFLAGS="-fPIC -Wno-unknown-warning-option" make x64.release -j${NUM_CPU_CORES} i18nsupport=off V=1
 
-  if [ $PY_VER = 3 ]; then
-    export PATH=$OLD_PATH
+  if [ ${PY_VER} = 3 ]; then
+    export PATH=${OLD_PATH}
   fi
 }
 
 install_libuv() {
-  if [ -d $V8EVAL_ROOT/uv ]; then
+  if [ -d ${V8EVAL_ROOT}/uv ]; then
     return 0
   fi
 
-  cd $V8EVAL_ROOT
+  cd ${V8EVAL_ROOT}
   git clone https://github.com/libuv/libuv.git uv
   cd uv
   git checkout v1.7.5
@@ -90,18 +90,18 @@ build() {
   install_v8
   install_libuv
 
-  cd $V8EVAL_ROOT
+  cd ${V8EVAL_ROOT}
   mkdir -p build
   cd build
   cmake -DCMAKE_BUILD_TYPE=Release -DV8EVAL_TEST=OFF ..
   make VERBOSE=1
 
-  cd $V8EVAL_ROOT
+  cd ${V8EVAL_ROOT}
   rm -rf old_v8_tools_luci-go.git
 }
 
 docs() {
-  cd $V8EVAL_ROOT/docs
+  cd ${V8EVAL_ROOT}/docs
   rm -rf ./html
   doxygen
 }
@@ -110,17 +110,17 @@ test() {
   build
   install_googletest
 
-  cd $V8EVAL_ROOT/build
+  cd ${V8EVAL_ROOT}/build
   cmake -DCMAKE_BUILD_TYPE=Release -DV8EVAL_TEST=ON ..
   make VERBOSE=1
   ./test/v8eval-test
 }
 
-# dispatch subcommand
-SUBCOMMAND="$1";
-case "${SUBCOMMAND}" in
-  ""       ) build ;;
-  "docs"   ) docs ;;
-  "test"   ) test ;;
-  *        ) echo "unknown subcommand: ${SUBCOMMAND}"; exit 1 ;;
+# dispatch subcommands
+SUBCOMMAND=${1}
+case ${SUBCOMMAND} in
+  ""     ) build ;;
+  "docs" ) docs ;;
+  "test" ) test ;;
+  *      ) echo "unknown subcommand: ${SUBCOMMAND}"; exit 1 ;;
 esac
