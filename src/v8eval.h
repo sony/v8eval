@@ -4,14 +4,9 @@
 #include <string>
 
 #include "v8.h"
-#include "v8-debug.h"
 
 /// \file
 namespace v8eval {
-
-class DbgSrv;
-
-typedef void (*debugger_cb)(std::string&, void *opq);
 
 /// \brief Set the given V8 flags
 ///
@@ -58,23 +53,6 @@ class _V8 {
   /// If some JavaScript exception happens in runtime, the exception message is returned.
   std::string call(const std::string& func, const std::string& args);
 
-  /// \brief Start a debug server associated with the V8 instance
-  /// \param port The TCP/IP port the debugger will listen, at localhost
-  /// \return success or not as boolean
-  ///
-  /// After the debugger is successfully started, it will be possible to
-  /// send commands and receive events at the specified port. When the
-  /// debugger is started, the Javascript's "debugger" statement will
-  /// cause the V8 instance to halt and wait for instructions through
-  /// the debugger port.
-  bool enable_debugger(int port);
-
-  /// \brief Stop the debug server, if running.
-  ///
-  /// The debug server, if currently running, will be stopped, causing
-  /// connections to remote debuggers to be dropped.
-  void disable_debugger();
-
  protected:
   void enable_heap_report();
 
@@ -85,25 +63,11 @@ class _V8 {
   v8::Local<v8::String> new_string(const char* str);
   v8::Local<v8::Value> json_parse(v8::Local<v8::Context> context, v8::Local<v8::String> str);
   v8::Local<v8::String> json_stringify(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
-
- private:
-  static void debugger_message_handler(const v8::Debug::Message& message);
-
-  bool debugger_init(debugger_cb cb, void *cbopq);
-  bool debugger_send(const std::string& cmd);
-  void debugger_process();
-  void debugger_stop();
+  std::string to_std_string(v8::Local<v8::Value> value);
 
  private:
   v8::Isolate* isolate_;
   v8::Persistent<v8::Context> context_;
-
-  DbgSrv* dbg_server_;
-  v8::Isolate* dbg_isolate_;
-  debugger_cb callback_;
-  void* callback_opq_;
-
-  friend class DbgSrv;
 };
 
 }  // namespace v8eval

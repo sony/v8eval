@@ -1,5 +1,4 @@
 #include "v8eval.h"
-#include "dbgsrv.h"
 
 #include <cassert>
 #include <cstdlib>
@@ -40,38 +39,11 @@ bool dispose() {
   return true;
 }
 
-class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
- public:
-  virtual void* Allocate(size_t length) {
-    void* data = AllocateUninitialized(length);
-    return data == NULL ? data : memset(data, 0, length);
-  }
-
-  virtual void* AllocateUninitialized(size_t length) {
-    return malloc(length);
-  }
-
-  virtual void Free(void* data, size_t) {
-    free(data);
-  }
-};
-
-static ArrayBufferAllocator allocator;
-
 _V8::_V8() {
   v8::Isolate::CreateParams create_params;
-  create_params.array_buffer_allocator = &allocator;
+  create_params.array_buffer_allocator =
+      v8::ArrayBuffer::Allocator::NewDefaultAllocator();
   isolate_ = v8::Isolate::New(create_params);
-
-  dbg_server_ = nullptr;
-  dbg_isolate_ = nullptr;
-  callback_ = nullptr;
-  callback_opq_ = nullptr;
-
-  // Use Isolate's local storage to store a pointer to the associated
-  // V8 instance. This is retrieved in the V8 debugger's callback, as
-  // the instance pointer is the only context we get from the caller.
-  isolate_->SetData(0, this);
 
   v8::Locker locker(isolate_);
 
@@ -81,11 +53,6 @@ _V8::_V8() {
 }
 
 _V8::~_V8() {
-  if (dbg_server_) {
-    delete dbg_server_;
-  }
-
-  context_.Reset();
   isolate_->Dispose();
 }
 
@@ -107,14 +74,14 @@ v8::Local<v8::String> _V8::new_string(const char* str) {
   return v8::String::NewFromUtf8(isolate_, str ? str : "", v8::NewStringType::kNormal).ToLocalChecked();
 }
 
-static std::string to_std_string(v8::Local<v8::Value> value) {
-  v8::String::Utf8Value str(value);
+std::string _V8::to_std_string(v8::Local<v8::Value> value) {
+  v8::String::Utf8Value str(isolate_, value);
   return *str ? *str : "Error: Cannot convert to string";
 }
 
 v8::Local<v8::Value> _V8::json_parse(v8::Local<v8::Context> context, v8::Local<v8::String> str) {
   v8::Local<v8::Object> global = context->Global();
-  v8::Local<v8::Object> json = global->Get(context, new_string("JSON")).ToLocalChecked()->ToObject();
+  v8::Local<v8::Object> json = global->Get(context, new_string("JSON")).ToLocalChecked()->ToObject(isolate_);
   v8::Local<v8::Function> parse = v8::Local<v8::Function>::Cast(json->Get(context, new_string("parse")).ToLocalChecked());
 
   v8::Local<v8::Value> result;
@@ -128,14 +95,14 @@ v8::Local<v8::Value> _V8::json_parse(v8::Local<v8::Context> context, v8::Local<v
 
 v8::Local<v8::String> _V8::json_stringify(v8::Local<v8::Context> context, v8::Local<v8::Value> value) {
   v8::Local<v8::Object> global = context->Global();
-  v8::Local<v8::Object> json = global->Get(context, new_string("JSON")).ToLocalChecked()->ToObject();
+  v8::Local<v8::Object> json = global->Get(context, new_string("JSON")).ToLocalChecked()->ToObject(isolate_);
   v8::Local<v8::Function> stringify = v8::Local<v8::Function>::Cast(json->Get(context, new_string("stringify")).ToLocalChecked());
 
   v8::Local<v8::Value> result;
   if (!stringify->Call(context, json, 1, &value).ToLocal(&result)) {
     return new_string("");
   } else {
-    return result->ToString();
+    return result->ToString(isolate_);
   }
 }
 
@@ -205,95 +172,6 @@ std::string _V8::call(const std::string& func, const std::string& args) {
   } else {
     return to_std_string(json_stringify(context, result));
   }
-}
-
-bool _V8::enable_debugger(int port) {
-  if (dbg_server_) {
-    return false;
-  }
-
-  dbg_server_ = new DbgSrv(*this);
-  if (!dbg_server_->start(port)) {
-    delete dbg_server_;
-    dbg_server_ = nullptr;
-    return false;
-  }
-
-  return true;
-}
-
-void _V8::disable_debugger() {
-  if (dbg_server_) {
-    delete dbg_server_;
-    dbg_server_ = nullptr;
-  }
-}
-
-void _V8::debugger_message_handler(const v8::Debug::Message& message) {
-  v8::Isolate* isolate = message.GetIsolate();
-  _V8 *_v8 = (v8eval::_V8*)isolate->GetData(0);
-  std::string string = *v8::String::Utf8Value(message.GetJSON());
-
-  if (_v8->callback_) {
-    _v8->callback_(string, _v8->callback_opq_);
-  }
-}
-
-bool _V8::debugger_init(debugger_cb cb, void *cbopq) {
-  v8::Isolate::CreateParams create_params;
-  create_params.array_buffer_allocator = &allocator;
-  dbg_isolate_ = v8::Isolate::New(create_params);
-
-  if (callback_) {
-    return false;
-  }
-
-  callback_ = cb;
-  callback_opq_ = cbopq;
-
-  // Set Debuger callback.
-  v8::Locker locker(isolate_);
-  v8::Isolate::Scope isolate_scope(isolate_);
-  v8::HandleScope handle_scope(isolate_);
-  v8::Debug::SetMessageHandler(isolate_, debugger_message_handler);
-
-  return true;
-}
-
-void _V8::debugger_process() {
-  // Process debug messages on behalf of the V8 instance.
-  v8::Locker locker(isolate_);
-  v8::Isolate::Scope isolate_scope(isolate_);
-  v8::HandleScope handle_scope(isolate_);
-
-  v8::Debug::ProcessDebugMessages(isolate_);
-}
-
-bool _V8::debugger_send(const std::string& cmd) {
-  v8::Locker locker(dbg_isolate_);
-  v8::Isolate::Scope isolate_scope(dbg_isolate_);
-  v8::HandleScope handle_scope(dbg_isolate_);
-
-  if (!callback_) {
-    return false;
-  }
-
-  v8::Local<v8::String> vstr = v8::String::NewFromUtf8(dbg_isolate_, cmd.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
-  v8::String::Value v(vstr);
-  v8::Debug::SendCommand(isolate_, *v, v.length());
-  return true;
-}
-
-void _V8::debugger_stop() {
-  v8::Locker locker(isolate_);
-  v8::Isolate::Scope isolate_scope(isolate_);
-  v8::HandleScope handle_scope(isolate_);
-  v8::Debug::SetMessageHandler(isolate_, nullptr);
-
-  callback_ = nullptr;
-  callback_opq_ = nullptr;
-  dbg_isolate_->Dispose();
-  dbg_isolate_ = nullptr;
 }
 
 void Heap(const v8::FunctionCallbackInfo<v8::Value>& args) {

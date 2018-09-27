@@ -4,13 +4,9 @@ V8EVAL_ROOT=`cd $(dirname ${0}) && pwd`
 
 PLATFORM=`uname`
 if [ ${PLATFORM} = "Linux" ]; then
-  NUM_CPU_CORES=`cat /proc/cpuinfo | grep cores | grep -o '[0-9]\+' | awk '{total=total+$1}; END{print total}'`
-
   export CC=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang
   export CXX=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang++
 elif [ ${PLATFORM} = "Darwin" ]; then
-  NUM_CPU_CORES=`sysctl -n hw.ncpu`
-
   export CC=`which clang`
   export CXX=`which clang++`
   export CPP="`which clang` -E"
@@ -50,45 +46,44 @@ install_v8() {
     return 0
   fi
 
-  PY_VER=`python -c 'import sys; print(sys.version_info[0])'`
-  if [ ${PY_VER} = 3 ]; then
-    OLD_PATH=${PATH}
-    export PATH=${V8EVAL_ROOT}/python/bin:${PATH}
-  fi
-
   cd ${V8EVAL_ROOT}
   fetch v8
   cd v8
-  git checkout 6.3.288
+  git checkout 7.1.177
   gclient sync
-  if [ ${PY_VER} = 3 ]; then
-    sed -i -e 's/python -c/python2 -c/' Makefile
+  if [ ${PLATFORM} = "Linux" ]; then
+    ./build/install-build-deps.sh
   fi
-  CFLAGS="-fPIC -Wno-unknown-warning-option" CXXFLAGS="-fPIC -Wno-unknown-warning-option" make x64.release -j${NUM_CPU_CORES} i18nsupport=off V=1
-
-  if [ ${PY_VER} = 3 ]; then
-    export PATH=${OLD_PATH}
-  fi
+  tools/dev/v8gen.py x64.release
+  ninja -C out.gn/x64.release
 }
 
-install_libuv() {
-  if [ -d ${V8EVAL_ROOT}/uv ]; then
+archive_v8_lib() {
+  if [ -f ${1}/lib${2}.a ]; then
     return 0
   fi
 
-  cd ${V8EVAL_ROOT}
-  git clone https://github.com/libuv/libuv.git uv
-  cd uv
-  git checkout v1.7.5
-  sh autogen.sh
-  ./configure --with-pic --disable-shared
-  make V=1
+  ar cr ${1}/lib${2}.a ${1}/${2}/*.o
+}
+
+archive_v8() {
+  if [ ${PLATFORM} = "Linux" ]; then
+    return 0
+  fi
+
+  V8_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj
+  archive_v8_lib ${V8_OUT} v8_base
+  archive_v8_lib ${V8_OUT} v8_libsampler
+  archive_v8_lib ${V8_OUT} v8_init
+  archive_v8_lib ${V8_OUT} v8_initializers
+  archive_v8_lib ${V8_OUT} v8_nosnapshot
+  archive_v8_lib ${V8_OUT} torque_generated_initializers
 }
 
 build() {
   install_depot_tools
   install_v8
-  install_libuv
+  archive_v8
 
   cd ${V8EVAL_ROOT}
   mkdir -p build

@@ -45,21 +45,6 @@ class V8TestCase(unittest.TestCase):
         with self.assertRaises(v8eval.V8Error):
             v8.call('i', [7])
 
-    def test_debugger(self):
-        v8 = v8eval.V8()
-        with self.assertRaises(TypeError):
-            v8.enable_debugger(0.1)
-        with self.assertRaises(v8eval.V8Error):
-            v8.enable_debugger(-1)
-
-        port = 12345
-        self.assertEqual(v8.enable_debugger(port), None)
-        with self.assertRaises(v8eval.V8Error):
-            v8.enable_debugger(port)
-        self.assertEqual(v8.disable_debugger(), None)
-        self.assertEqual(v8.enable_debugger(port), None)
-        self.assertEqual(v8.disable_debugger(), None)
-
     def test_multithreading(self):
         thread1 = V8Thread(self, 10000)
         thread2 = V8Thread(self, 10000)

@@ -9,7 +9,6 @@ from sys import platform
 # set path variables
 v8eval_root = abspath(dirname(__file__))
 v8_dir = v8eval_root + "/v8"
-uv_dir = v8eval_root + "/uv"
 py_dir = v8eval_root + "/python"
 py_v8eval_dir = py_dir + "/v8eval"
 
@@ -24,12 +23,9 @@ system("cp " + v8eval_root + "/src/v8eval_python.h " + py_v8eval_dir)
 system("swig -c++ -python -outdir " + py_v8eval_dir + " -o "  + py_v8eval_dir + "/v8eval_wrap.cxx " + py_v8eval_dir + "/v8eval.i")
 system("cat " + py_dir + "/_v8eval.py >> " + py_v8eval_dir + "/v8eval.py")
 
-# workaround
-system("mkdir " + v8_dir + "/buildtools/third_party/libc++/trunk/test/std/experimental/filesystem/Inputs/static_test_env/dne")
-
 # build _v8eval.so
-include_dirs = [v8_dir, v8_dir + '/include', uv_dir + '/include']
-library_dirs = [v8eval_root + '/build', uv_dir + '/.libs']
+include_dirs = [v8_dir, v8_dir + '/include']
+library_dirs = [v8eval_root + '/build']
 libraries=['v8eval',
            'v8eval_python',
            'v8_libplatform',
@@ -39,7 +35,9 @@ libraries=['v8eval',
            'v8_init',
            'v8_initializers',
            'v8_nosnapshot',
-           'uv']
+           'torque_generated_initializers',
+           'icuuc',
+           'icui18n']
 
 if platform == "linux" or platform == "linux2":
     environ["CC"] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
@@ -49,7 +47,7 @@ if platform == "linux" or platform == "linux2":
 
     library_dirs += [v8_dir + '/out/x64.release/obj.target/src']
 elif platform == "darwin":
-    library_dirs += [v8_dir + '/out/x64.release']
+    library_dirs += [v8_dir + '/out.gn/x64.release/obj', v8_dir + '/out.gn/x64.release/obj/third_party/icu']
 
 v8eval_module = Extension(
     '_v8eval',

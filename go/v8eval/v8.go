@@ -23,14 +23,6 @@ type V8 interface {
 	// If the result cannot be stored into 'res' due to type mismatch, Eval returns the error.
 	// If some JavaScript exception happens in runtime, Call returns the exception as a Go error.
 	Call(fun string, args interface{}, res interface{}) error
-
-	// EnableDebugger starts a debug server associated with the V8 instance.
-	// The server will listen on the given TCP/IP port.
-	// If failing to start the server, EnableDebugger returns the error.
-	EnableDebugger(port int) error
-
-	// DisableDebugger stops the debug server, if running.
-	DisableDebugger()
 }
 
 type v8 struct {
@@ -79,16 +71,4 @@ func (v *v8) decode(str string, val interface{}) error {
 	}
 
 	return nil
-}
-
-func (v *v8) EnableDebugger(port int) error {
-	if !v.xV8.Enable_debugger(port) {
-		return errors.New("failed to start debug server")
-	}
-
-	return nil
-}
-
-func (v *v8) DisableDebugger() {
-	v.xV8.Disable_debugger()
 }

@@ -86,39 +86,6 @@ class V8:
             except ValueError:
                 raise V8Error(res)
 
-    def enable_debugger(self, port):
-        """"Starts a debug server associated with the V8 instance.
-
-        Args:
-            port (int): The TCP/IP port the server will listen, at localhost.
-
-        Return:
-            None.
-
-        Raises:
-            TypeError: If port is not an int.
-
-            V8Error: If failing to start the debug server.
-        """
-        if not isinstance(port, int):
-            raise TypeError('port not integer')
-
-        if not self._v8.enable_debugger(port):
-            raise V8Error('failed to start debug server')
-
-    def disable_debugger(self):
-        """"Stops the debug server, if running.
-
-        Args:
-            None.
-
-        Returns:
-            None.
-
-        Raises:
-            None.
-        """
-        self._v8.disable_debugger()
 
 # initialize the V8 runtime environment
 initialize()

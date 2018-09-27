@@ -19,7 +19,9 @@ set(v8eval-linklibs
     v8_init
     v8_initializers
     v8_nosnapshot
-    uv
+    torque_generated_initializers
+    icuuc
+    icui18n
     gtest
     gtest_main
 )
