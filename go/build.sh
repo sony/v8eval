@@ -4,19 +4,24 @@ V8EVAL_ROOT=`cd $(dirname ${0})/.. && pwd`
 
 V8EVAL_INCLUDE_PATH="-I${V8EVAL_ROOT}/v8/include"
 
-if [ `uname` = "Darwin" ]; then
-  V8_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj
-  V8EVAL_LIBRARY_PATH="-L${V8EVAL_ROOT}/build -L${V8_OUT} -L${V8_OUT}/third_party/icu"
-else
-  V8EVAL_LIBRARY_PATH="-L${V8EVAL_ROOT}/build -L${V8EVAL_ROOT}/v8/out/x64.release/obj.target/src"
-fi
-
-V8EVAL_LIBRARIES="-lv8eval -lv8eval_go -lv8_libplatform -lv8_base -lv8_libbase -lv8_libsampler -lv8_init -lv8_initializers -lv8_nosnapshot -ltorque_generated_initializers -licuuc -licui18n"
+V8EVAL_LIBRARY_PATH="-L${V8EVAL_ROOT}/build -L${V8EVAL_ROOT}/v8/out.gn/x64.release/obj"
 if [ `uname` = "Linux" ] ; then
-  V8EVAL_LIBRARIES="${V8EVAL_LIBRARIES} -ldl -lpthread -lrt"
+  V8EVAL_LIBRARY_PATH="${V8EVAL_LIBRARY_PATH} v8/out.gn/x64.release/obj/buildtools/third_party"
 fi
 
-CGO_FLAGS="// #cgo CXXFLAGS: -g -O2 -std=c++11 ${V8EVAL_INCLUDE_PATH}\n// #cgo LDFLAGS: ${V8EVAL_LIBRARY_PATH} ${V8EVAL_LIBRARIES}"
+V8EVAL_LIBRARIES="-lv8eval -lv8eval_go -lv8_libplatform -lv8_base -lv8_libbase -lv8_libsampler -lv8_init -lv8_initializers -lv8_nosnapshot -ltorque_generated_initializers"
+if [ `uname` = "Linux" ] ; then
+  V8EVAL_LIBRARIES="${V8EVAL_LIBRARIES} -ldl -lpthread -lrt -lc++ -lc++abi"
+fi
+
+V8EVAL_CFLAGS="-std=c++14"
+if [ `uname` = "Linux" ] ; then
+  V8EVAL_CFLAGS="${V8EVAL_CFLAGS} -nostdinc++"
+  V8EVAL_CFLAGS="${V8EVAL_CFLAGS} -isystem${V8EVAL_ROOT}/v8/buildtools/third_party/libc++/trunk/include"
+  V8EVAL_CFLAGS="${V8EVAL_CFLAGS} -isystem${V8EVAL_ROOT}/v8/buildtools/third_party/libc++abi/trunk/include"
+fi
+
+CGO_FLAGS="// #cgo CXXFLAGS: ${V8EVAL_CFLAGS} ${V8EVAL_INCLUDE_PATH}\n// #cgo LDFLAGS: ${V8EVAL_LIBRARY_PATH} ${V8EVAL_LIBRARIES}"
 
 build() {
   ${V8EVAL_ROOT}/build.sh
