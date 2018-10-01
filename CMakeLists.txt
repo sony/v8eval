@@ -17,7 +17,6 @@ include_directories(
 
 set(v8eval-linkdirs
     v8/out.gn/x64.release/obj
-    v8/out.gn/x64.release/obj/third_party/icu
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")

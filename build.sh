@@ -48,7 +48,7 @@ install_v8() {
   if [ ${PLATFORM} = "Linux" ]; then
     ./build/install-build-deps.sh
   fi
-  tools/dev/v8gen.py x64.release
+  tools/dev/v8gen.py x64.release -- v8_use_snapshot=false v8_enable_i18n_support=false
   ninja -v -C out.gn/x64.release
 }
 
