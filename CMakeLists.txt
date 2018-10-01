@@ -74,7 +74,6 @@ endif(APPLE)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(v8eval-cflags
         ${v8eval-cflags}
-        -nostdlib++
         -isystem${CMAKE_CURRENT_SOURCE_DIR}/v8/buildtools/third_party/libc++/trunk/include
         -isystem${CMAKE_CURRENT_SOURCE_DIR}/v8/buildtools/third_party/libc++abi/trunk/include
     )
