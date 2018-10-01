@@ -15,18 +15,21 @@ include_directories(
     test/googletest/googletest/include
 )
 
-if(APPLE)
-    link_directories(
-        v8/out.gn/x64.release/obj
-        v8/out.gn/x64.release/obj/third_party/icu
-    )
-endif(APPLE)
+set(v8eval-linkdirs
+    v8/out.gn/x64.release/obj
+    v8/out.gn/x64.release/obj/third_party/icu
+)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    link_directories(
-        v8/out/x64.release/obj.target/src
+    set(v8eval-linkdirs
+        ${v8eval-linkdirs}
+        v8/out.gn/x64.release/obj/buildtools/third_party
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
+link_directories(
+    ${v8eval-linkdirs}
+)
 
 add_library(v8eval STATIC
     src/v8eval.cxx
@@ -46,7 +49,6 @@ add_library(v8eval_ruby STATIC
 
 set(v8eval-cflags
     -Wall
-    -Wendif-labels
     -Werror
     -Wno-missing-field-initializers
     -Wno-unused-parameter
@@ -56,12 +58,27 @@ set(v8eval-cflags
     -fno-rtti
     -fno-strict-aliasing
     -fno-threadsafe-statics
-    -fstrict-aliasing
     -fvisibility=hidden
     -fvisibility-inlines-hidden
     -gdwarf-2
-    -std=c++11
+    -std=c++14
 )
+
+if(APPLE)
+    set(v8eval-cflags
+        ${v8eval-cflags}
+        -stdlib=libc++
+    )
+endif(APPLE)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(v8eval-cflags
+        ${v8eval-cflags}
+        -nostdlib++
+        -isystem${CMAKE_CURRENT_SOURCE_DIR}/v8/buildtools/third_party/libc++/trunk/include
+        -isystem${CMAKE_CURRENT_SOURCE_DIR}/v8/buildtools/third_party/libc++abi/trunk/include
+    )
+endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
 string(REPLACE ";" " " v8eval-cflags "${v8eval-cflags}")
 

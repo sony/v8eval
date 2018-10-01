@@ -20,8 +20,8 @@ set(v8eval-linklibs
     v8_initializers
     v8_nosnapshot
     torque_generated_initializers
-    icuuc
     icui18n
+    icuuc
     gtest
     gtest_main
 )
@@ -32,6 +32,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         dl
         rt
         pthread
+        c++
+        c++abi
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 

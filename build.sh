@@ -3,22 +3,16 @@
 V8EVAL_ROOT=`cd $(dirname ${0}) && pwd`
 
 PLATFORM=`uname`
-if [ ${PLATFORM} = "Linux" ]; then
-  export CC=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang
-  export CXX=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang++
-elif [ ${PLATFORM} = "Darwin" ]; then
-  export CC=`which clang`
-  export CXX=`which clang++`
-  export CPP="`which clang` -E"
-  export LINK="`which clang++`"
-  export CC_host=`which clang`
-  export CXX_host=`which clang++`
-  export CPP_host="`which clang` -E"
-  export LINK_host=`which clang++`
-  export GYP_DEFINES="clang=1 mac_deployment_target=10.10"
-else
+if [ ! ${PLATFORM} = "Linux" -a ! ${PLATFORM} = "Darwin" ]; then
   echo "unsupported platform: ${PLATFORM}"
   exit 1
+fi
+
+export CC=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang
+export CXX=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang++
+
+if [ ${PLATFORM} = "Linux" ]; then
+  export PATH=${V8EVAL_ROOT}/v8/third_party/binutils/Linux_x64/Release/bin:${PATH}
 fi
 
 install_depot_tools() {
@@ -55,7 +49,7 @@ install_v8() {
     ./build/install-build-deps.sh
   fi
   tools/dev/v8gen.py x64.release
-  ninja -C out.gn/x64.release
+  ninja -v -C out.gn/x64.release
 }
 
 archive_v8_lib() {
@@ -67,10 +61,6 @@ archive_v8_lib() {
 }
 
 archive_v8() {
-  if [ ${PLATFORM} = "Linux" ]; then
-    return 0
-  fi
-
   V8_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj
   archive_v8_lib ${V8_OUT} v8_base
   archive_v8_lib ${V8_OUT} v8_libsampler
@@ -80,10 +70,27 @@ archive_v8() {
   archive_v8_lib ${V8_OUT} torque_generated_initializers
 }
 
+archive_stdlib() {
+  if [ -f ${1}/${2}.a ]; then
+    return 0
+  fi
+
+  ar cr ${1}/${2}.a ${1}/${2}/${2}/*.o
+}
+
+archive_stdlibs() {
+  STDLIB_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj/buildtools/third_party
+  archive_stdlib ${STDLIB_OUT} libc++
+  archive_stdlib ${STDLIB_OUT} libc++abi
+}
+
 build() {
   install_depot_tools
   install_v8
   archive_v8
+  if [ ${PLATFORM} = "Linux" ]; then
+    archive_stdlibs
+  fi
 
   cd ${V8EVAL_ROOT}
   mkdir -p build
