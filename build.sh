@@ -25,16 +25,6 @@ install_depot_tools() {
   git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 }
 
-install_googletest() {
-  if [ -d ${V8EVAL_ROOT}/test/googletest ]; then
-    return 0
-  fi
-
-  cd ${V8EVAL_ROOT}/test
-  git clone https://github.com/google/googletest.git
-  git checkout release-1.7.0
-}
-
 install_v8() {
   if [ -d ${V8EVAL_ROOT}/v8 ]; then
     return 0
@@ -52,7 +42,7 @@ install_v8() {
   ninja -v -C out.gn/x64.release
 }
 
-archive_v8_lib() {
+archive_lib() {
   if [ -f ${1}/lib${2}.a ]; then
     return 0
   fi
@@ -60,28 +50,28 @@ archive_v8_lib() {
   ar cr ${1}/lib${2}.a ${1}/${2}/*.o
 }
 
+V8_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj
+
 archive_v8() {
-  V8_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj
-  archive_v8_lib ${V8_OUT} v8_base
-  archive_v8_lib ${V8_OUT} v8_libsampler
-  archive_v8_lib ${V8_OUT} v8_init
-  archive_v8_lib ${V8_OUT} v8_initializers
-  archive_v8_lib ${V8_OUT} v8_nosnapshot
-  archive_v8_lib ${V8_OUT} torque_generated_initializers
+  archive_lib ${V8_OUT} v8_base
+  archive_lib ${V8_OUT} v8_libsampler
+  archive_lib ${V8_OUT} v8_init
+  archive_lib ${V8_OUT} v8_initializers
+  archive_lib ${V8_OUT} v8_nosnapshot
+  archive_lib ${V8_OUT} torque_generated_initializers
 }
 
-archive_stdlib() {
-  if [ -f ${1}/${2}.a ]; then
-    return 0
-  fi
-
-  ar cr ${1}/${2}.a ${1}/${2}/${2}/*.o
+archive_libcxx() {
+  archive_lib ${V8_OUT}/buildtools/third_party/libc++ libc++
 }
 
-archive_stdlibs() {
-  STDLIB_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj/buildtools/third_party
-  archive_stdlib ${STDLIB_OUT} libc++
-  archive_stdlib ${STDLIB_OUT} libc++abi
+archive_libcxxabi() {
+  archive_lib ${V8_OUT}/buildtools/third_party/libc++abi libc++abi
+}
+
+archive_googletest() {
+  archive_lib ${V8_OUT}/third_party/googletest gtest
+  archive_lib ${V8_OUT}/third_party/googletest gtest_main
 }
 
 build() {
@@ -89,7 +79,8 @@ build() {
   install_v8
   archive_v8
   if [ ${PLATFORM} = "Linux" ]; then
-    archive_stdlibs
+    archive_libcxx
+    archive_libcxxabi
   fi
 
   cd ${V8EVAL_ROOT}
@@ -110,7 +101,7 @@ docs() {
 
 test() {
   build
-  install_googletest
+  archive_googletest
 
   cd ${V8EVAL_ROOT}/build
   cmake -DCMAKE_BUILD_TYPE=Release -DV8EVAL_TEST=ON ..

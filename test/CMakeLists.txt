@@ -30,13 +30,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         dl
         rt
         pthread
-        c++
-        c++abi
+        libc++
+        libc++abi
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
 target_link_libraries(v8eval-test
     ${v8eval-linklibs}
 )
-
-add_subdirectory(googletest/googletest)

@@ -12,17 +12,19 @@ include_directories(
     v8
     v8/include
     src
-    test/googletest/googletest/include
+    v8/third_party/googletest/src/googletest/include
 )
 
 set(v8eval-linkdirs
     v8/out.gn/x64.release/obj
+    v8/out.gn/x64.release/obj/third_party/googletest
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(v8eval-linkdirs
         ${v8eval-linkdirs}
-        v8/out.gn/x64.release/obj/buildtools/third_party
+        v8/out.gn/x64.release/obj/buildtools/third_party/libc++
+        v8/out.gn/x64.release/obj/buildtools/third_party/libc++abi
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
