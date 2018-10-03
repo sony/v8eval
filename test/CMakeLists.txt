@@ -30,8 +30,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         dl
         rt
         pthread
-        libc++
-        libc++abi
+        c++
+        c++abi
     )
 endif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 

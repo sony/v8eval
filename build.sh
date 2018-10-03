@@ -47,7 +47,11 @@ archive_lib() {
     return 0
   fi
 
-  ar cr ${1}/lib${2}.a ${1}/${2}/*.o
+  if [ `echo ${2} | cut -c 1-3` = "lib" ]; then
+    ar cr ${1}/${2}.a ${1}/${2}/*.o
+  else
+    ar cr ${1}/lib${2}.a ${1}/${2}/*.o
+  fi
 }
 
 V8_OUT=${V8EVAL_ROOT}/v8/out.gn/x64.release/obj
