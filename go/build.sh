@@ -61,7 +61,7 @@ test() {
 SUBCOMMAND=${1};
 case ${SUBCOMMAND} in
   ""        ) build ;;
-  "go"      ) shift; go ${@} ;;
+  "go"      ) shift; go "${@}" ;;
   "install" ) install ;;
   "test"    ) test ;;
   *         ) echo "unknown subcommand: ${SUBCOMMAND}"; exit 1 ;;
