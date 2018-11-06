@@ -42,17 +42,14 @@ libraries=['v8eval',
            'v8_initializers',
            'v8_nosnapshot',
            'torque_generated_initializers']
-extra_compile_args=['-O3', '-std=c++14']
+extra_compile_args=['-O3', '-std=c++14', '-stdlib=libc++']
 
-if platform == 'darwin':
-    extra_compile_args += ['-stdlib=libc++']
-elif platform == 'linux' or platform == 'linux2':
+if platform == 'linux' or platform == 'linux2':
     library_dirs += [v8_dir + '/out.gn/x64.release/obj/buildtools/third_party/libc++',
                      v8_dir + '/out.gn/x64.release/obj/buildtools/third_party/libc++abi']
     libraries += ['rt', 'c++', 'c++abi']
-    extra_compile_args += ['-nostdinc++',
-                           '-isystem ' + v8_dir + '/buildtools/third_party/libc++/trunk/include',
-                           '-isystem ' + v8_dir + '/buildtools/third_party/libc++abi/trunk/include']
+    extra_compile_args += ['-isystem' + v8_dir + '/buildtools/third_party/libc++/trunk/include',
+                           '-isystem' + v8_dir + '/buildtools/third_party/libc++abi/trunk/include']
 
 v8eval_module = Extension(
     '_v8eval',
