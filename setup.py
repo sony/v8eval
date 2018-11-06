@@ -8,24 +8,30 @@ from sys import platform
 
 # set path variables
 v8eval_root = abspath(dirname(__file__))
-v8_dir = v8eval_root + "/v8"
-py_dir = v8eval_root + "/python"
-py_v8eval_dir = py_dir + "/v8eval"
+v8_dir = v8eval_root + '/v8'
+py_dir = v8eval_root + '/python'
+py_v8eval_dir = py_dir + '/v8eval'
 
 
 # install v8 and build libv8eval.a
-system(v8eval_root + "/build.sh")
+system(v8eval_root + '/build.sh')
 
 
 # generate v8eval_wrap.cxx and v8eval.py
-system("cp " + v8eval_root + "/src/v8eval.h " + py_v8eval_dir)
-system("cp " + v8eval_root + "/src/v8eval_python.h " + py_v8eval_dir)
-system("swig -c++ -python -outdir " + py_v8eval_dir + " -o "  + py_v8eval_dir + "/v8eval_wrap.cxx " + py_v8eval_dir + "/v8eval.i")
-system("cat " + py_dir + "/_v8eval.py >> " + py_v8eval_dir + "/v8eval.py")
+system('cp ' + v8eval_root + '/src/v8eval.h ' + py_v8eval_dir)
+system('cp ' + v8eval_root + '/src/v8eval_python.h ' + py_v8eval_dir)
+system('swig -c++ -python -outdir ' + py_v8eval_dir + ' -o '  + py_v8eval_dir + '/v8eval_wrap.cxx ' + py_v8eval_dir + '/v8eval.i')
+system('cat ' + py_dir + '/_v8eval.py >> ' + py_v8eval_dir + '/v8eval.py')
+
 
 # build _v8eval.so
+environ['CC'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
+environ['CXX'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang++'
+if platform == 'linux' or platform == 'linux2':
+    environ['PATH'] = v8_dir + '/third_party/binutils/Linux_x64/Release/bin:' + environ['PATH']
+
 include_dirs = [v8_dir, v8_dir + '/include']
-library_dirs = [v8eval_root + '/build']
+library_dirs = [v8eval_root + '/build', v8_dir + '/out.gn/x64.release/obj']
 libraries=['v8eval',
            'v8eval_python',
            'v8_libplatform',
@@ -35,19 +41,18 @@ libraries=['v8eval',
            'v8_init',
            'v8_initializers',
            'v8_nosnapshot',
-           'torque_generated_initializers',
-           'icuuc',
-           'icui18n']
+           'torque_generated_initializers']
+extra_compile_args=['-O3', '-std=c++14']
 
-if platform == "linux" or platform == "linux2":
-    environ["CC"] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
-    environ["CXX"] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang++'
-
-    libraries += ['rt']
-
-    library_dirs += [v8_dir + '/out/x64.release/obj.target/src']
-elif platform == "darwin":
-    library_dirs += [v8_dir + '/out.gn/x64.release/obj', v8_dir + '/out.gn/x64.release/obj/third_party/icu']
+if platform == 'darwin':
+    extra_compile_args += ['-stdlib=libc++']
+elif platform == 'linux' or platform == 'linux2':
+    library_dirs += [v8_dir + '/out.gn/x64.release/obj/buildtools/third_party/libc++',
+                     v8_dir + '/out.gn/x64.release/obj/buildtools/third_party/libc++abi']
+    libraries += ['rt', 'c++', 'c++abi']
+    extra_compile_args += ['-nostdinc++',
+                           '-isystem ' + v8_dir + '/buildtools/third_party/libc++/trunk/include',
+                           '-isystem ' + v8_dir + '/buildtools/third_party/libc++abi/trunk/include']
 
 v8eval_module = Extension(
     '_v8eval',
@@ -55,8 +60,7 @@ v8eval_module = Extension(
     libraries=libraries,
     include_dirs=include_dirs,
     library_dirs=library_dirs,
-    extra_compile_args=['-O3',
-                        '-std=c++11'])
+    extra_compile_args=extra_compile_args)
 
 
 # make description
@@ -68,11 +72,12 @@ try:
 except ImportError:
     pass
 
+
 # setup v8eval package
 setup(name='v8eval',
       version='0.2.11',
       author='Yoshiyuki Mineo',
-      author_email='Yoshiyuki.Mineo@jp.sony.com',
+      author_email='Yoshiyuki.Mineo@sony.com',
       license='MIT',
       url='https://github.com/sony/v8eval',
       description=description,
@@ -81,12 +86,14 @@ setup(name='v8eval',
       ext_modules=[v8eval_module],
       py_modules=['v8eval'],
       package_dir={'': 'python/v8eval'},
-      classifiers=["License :: OSI Approved :: MIT License",
-                   "Programming Language :: Python :: 2.7",
-                   "Programming Language :: Python :: 3",
-                   "Programming Language :: Python :: 3.5",
-                   "Programming Language :: Python :: Implementation :: CPython",
-                   "Operating System :: POSIX :: Linux",
-                   "Operating System :: MacOS :: MacOS X",
-                   "Intended Audience :: Developers",
-                   "Topic :: Software Development :: Libraries"])
+      classifiers=['License :: OSI Approved :: MIT License',
+                   'Programming Language :: Python :: 2.7',
+                   'Programming Language :: Python :: 3',
+                   'Programming Language :: Python :: 3.5',
+                   'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7',
+                   'Programming Language :: Python :: Implementation :: CPython',
+                   'Operating System :: POSIX :: Linux',
+                   'Operating System :: MacOS :: MacOS X',
+                   'Intended Audience :: Developers',
+                   'Topic :: Software Development :: Libraries'])
