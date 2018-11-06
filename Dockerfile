@@ -14,6 +14,7 @@ RUN apt-get install -y \
   libsqlite3-dev \
   libssl-dev \
   openssl \
+  python-dev \
   zlib1g-dev
 
 # install python
