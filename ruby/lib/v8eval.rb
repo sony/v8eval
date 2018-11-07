@@ -58,22 +58,6 @@ module V8Eval
         end
       end
     end
-
-    # Starts a debug server associated with the V8 instance.
-    # @param [Integer] port TCP/IP port the server will listen, at localhost.
-    # @return nil.
-    # @raise [TypeError] If port is not an int.
-    # @raise [V8Error] If failing to start the debug server.
-    def enable_debugger(port)
-      fail TypeError, 'port not integer' unless port.is_a?(Integer)
-      fail V8Error, 'failed to start debug server' unless @v8.enable_debugger(port)
-    end
-
-    # Stops the debug server, if running.
-    # @return nil.
-    def disable_debugger
-      @v8.disable_debugger
-    end
   end
 end
 
