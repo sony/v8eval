@@ -6,7 +6,7 @@
 
 Multi-language bindings to JavaScript engine V8.
 
-Currently v8eval provides Go, Python and Ruby bindings to the latest V8 6.3 and supports Linux and Mac OS X.
+Currently v8eval provides Go, Python and Ruby bindings to the latest V8 7.1 and supports Linux and Mac OS X.
 v8eval uses SWIG and can be extended easily for other languages.
 
 ## Pre-installation
@@ -25,9 +25,17 @@ The installation takes several tens of minutes due to V8 build.
 
 #### Go
 
+v8eval requires Go 1.10 or later.
+
 ```
-git clone https://github.com/sony/v8eval.git $GOPATH/src/github.com/sony/v8eval
-$GOPATH/src/github.com/sony/v8eval/go/build.sh install
+git clone https://github.com/sony/v8eval.git ${GOPATH}/src/github.com/sony/v8eval
+${GOPATH}/src/github.com/sony/v8eval/go/build.sh install
+```
+
+In the case of Linux, you need to build your Go program with `build.sh`:
+
+```
+${GOPATH}/src/github.com/sony/v8eval/go/build.sh go build
 ```
 
 #### Python
