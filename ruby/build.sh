@@ -28,8 +28,8 @@ test() {
   cd ${V8EVAL_ROOT}/ruby
   bundle install
 
-  rspec --init
-  rspec
+  bundle exec rspec --init
+  bundle exec rspec
 }
 
 # dispatch subcommand
