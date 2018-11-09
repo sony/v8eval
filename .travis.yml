@@ -1,18 +1,18 @@
 language: go
 go:
-  - 1.4
+  - 1.10.x
 os:
   - osx
-osx_image: xcode7.2
+osx_image: xcode10.1
 before_install:
   - brew update
-  - brew install cmake
   - brew install swig
   # already installed in travis-ci:
   # - brew install automake
+  # - brew install cmake
   # - brew install libtool
-  - rvm install 2.1.5
-  - rvm use 2.1.5
+  - rvm install 2.5.1
+  - rvm use 2.5.1
 install:
   - go get github.com/stretchr/testify
 script:
