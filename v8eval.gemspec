@@ -1,12 +1,12 @@
 Gem::Specification.new 'v8eval', '1.0' do |s|
   s.name = 'v8eval'
-  s.version = '0.2.11'
+  s.version = '0.3.0'
   s.licenses = ['MIT']
   s.description = 'Run JavaScript engine V8 in Ruby'
-  s.summary = 'v8eval gem is ruby binding to the latest V8 4.7 and supports
+  s.summary = 'v8eval gem is ruby binding to the latest V8 and supports
                Linux and Mac OS X.'
-  s.authors = ['Prateek Papriwal']
-  s.email = 'prateek.papriwal@jp.sony.com'
+  s.authors = ['Prateek Papriwal', 'Yoshiyuki Mineo']
+  s.email = 'Yoshiyuki.Mineo@sony.com'
   s.homepage = 'https://github.com/sony/v8eval'
   s.extra_rdoc_files = ['README.md']
 

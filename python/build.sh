@@ -22,7 +22,7 @@ docs() {
   export LC_ALL=en_US.UTF-8
   export LANG=en_US.UTF-8
   export PYTHONPATH=$V8EVAL_ROOT/python/v8eval
-  sphinx-quickstart -q -p v8eval -a 'Yoshiyuki Mineo' -v 0.1 -r 0.2.11 --ext-autodoc --ext-viewcode
+  sphinx-quickstart -q -p v8eval -a 'Yoshiyuki Mineo' -v 0.1 -r 0.3.0 --ext-autodoc --ext-viewcode
   sphinx-apidoc -M -o . ../v8eval
   perl -ni -e 'die if /Submodules/; print' ./v8eval.rst
   perl -pi -e 'print ":orphan:\n\n" if $. == 1' ./modules.rst
