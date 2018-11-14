@@ -70,6 +70,10 @@ except ImportError:
     pass
 
 
+# workaround
+system("mkdir " + v8_dir + "/buildtools/third_party/libc++/trunk/test/std/experimental/filesystem/Inputs/static_test_env/dne")
+
+
 # setup v8eval package
 setup(name='v8eval',
       version='0.3.0',
