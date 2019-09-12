@@ -1,4 +1,4 @@
-FROM golang:1.11
+FROM golang:1.12
 
 # install pyenv
 RUN git clone -b v1.2.7 https://github.com/pyenv/pyenv.git /.pyenv
