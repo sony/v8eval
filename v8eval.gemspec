@@ -17,7 +17,7 @@ Gem::Specification.new 'v8eval', '1.0' do |s|
   s.require_paths = ['ruby/lib', 'ruby/ext']
   s.extensions = Dir['ruby/ext/**/extconf.rb']
 
-  s.add_development_dependency 'rake', '~> 10.4', '>= 10.4.2'
+  s.add_development_dependency 'rake', '>= 12.3.3'
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'yard', '>= 0.9.11'
 
