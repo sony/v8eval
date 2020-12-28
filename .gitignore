@@ -1,6 +1,7 @@
 *.gem
 *.o
 *.so
+/.cipd
 /.gclient
 /.gclient_entries
 /.python-version
