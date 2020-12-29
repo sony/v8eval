@@ -25,9 +25,9 @@ system('cat ' + py_dir + '/_v8eval.py >> ' + py_v8eval_dir + '/v8eval.py')
 
 
 # build _v8eval.so
-environ['CC'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
-environ['CXX'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang++'
 if platform == 'linux' or platform == 'linux2':
+    environ['CC'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
+    environ['CXX'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang++'
     environ['PATH'] = v8_dir + '/third_party/binutils/Linux_x64/Release/bin:' + environ['PATH']
 
 include_dirs = [v8_dir, v8_dir + '/include']
