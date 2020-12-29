@@ -76,7 +76,7 @@ system("mkdir " + v8_dir + "/buildtools/third_party/libc++/trunk/test/std/experi
 
 # setup v8eval package
 setup(name='v8eval',
-      version='0.3.0',
+      version='0.3.1',
       author='Yoshiyuki Mineo',
       author_email='Yoshiyuki.Mineo@sony.com',
       license='MIT',
