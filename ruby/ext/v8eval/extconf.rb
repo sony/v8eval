@@ -40,8 +40,10 @@ end
 
 dir_config('', header_dirs, lib_dirs)
 
-RbConfig::MAKEFILE_CONFIG['CC'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
-RbConfig::MAKEFILE_CONFIG['CXX'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang++'
+if RUBY_PLATFORM =~ /linux/
+  RbConfig::MAKEFILE_CONFIG['CC'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang'
+  RbConfig::MAKEFILE_CONFIG['CXX'] = v8_dir + '/third_party/llvm-build/Release+Asserts/bin/clang++'
+end
 
 $LDFLAGS << ' -lv8eval' +
   ' -lv8eval_ruby' +

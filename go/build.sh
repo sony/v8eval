@@ -22,9 +22,9 @@ if [ `uname` = "Linux" ] ; then
   V8EVAL_CFLAGS="${V8EVAL_CFLAGS} -isystem ${V8EVAL_ROOT}/v8/buildtools/third_party/libc++abi/trunk/include"
 fi
 
-export CC=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang
-export CXX=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang++
 if [ `uname` = "Linux" ] ; then
+  export CC=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang
+  export CXX=${V8EVAL_ROOT}/v8/third_party/llvm-build/Release+Asserts/bin/clang++
   export CXX="${CXX} -nostdinc++"
   export PATH=${V8EVAL_ROOT}/v8/third_party/binutils/Linux_x64/Release/bin:${PATH}
 fi
@@ -51,7 +51,7 @@ install() {
 
 test() {
   build
-  go get github.com/stretchr/testify/assert
+  go get github.com/stretchr/testify@v1.6.1
 
   cd ${V8EVAL_ROOT}/go/v8eval
   go test
