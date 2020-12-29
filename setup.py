@@ -71,6 +71,7 @@ except ImportError:
 
 
 # workaround
+system("rm -rf " + v8_dir + "/third_party/perfetto")
 system("mkdir " + v8_dir + "/buildtools/third_party/libc++/trunk/test/std/experimental/filesystem/Inputs/static_test_env/dne")
 
 
