@@ -1,7 +1,7 @@
-FROM golang:1.12
+FROM golang:1.15
 
 # install pyenv
-RUN git clone -b v1.2.7 https://github.com/pyenv/pyenv.git /.pyenv
+RUN git clone -b v1.2.21 https://github.com/pyenv/pyenv.git /.pyenv
 ENV PYENV_ROOT /.pyenv
 ENV PATH ${PYENV_ROOT}/bin:${PATH}
 
@@ -18,21 +18,21 @@ RUN apt-get install -y \
   zlib1g-dev
 
 # install python
-ENV PYVER 2.7.15
+ENV PYVER 2.7.18
 RUN pyenv install ${PYVER}
 RUN pyenv global ${PYVER}
 
 # install rbenv
-RUN git clone -b v1.1.1 https://github.com/rbenv/rbenv.git /.rbenv
+RUN git clone -b v1.1.2 https://github.com/rbenv/rbenv.git /.rbenv
 ENV RBENV_ROOT /.rbenv
 ENV PATH ${RBENV_ROOT}/bin:${RBENV_ROOT}/shims:${PATH}
 
 # install ruby-build
 RUN mkdir -p "$(rbenv root)"/plugins
-RUN git clone -b v20180822 https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+RUN git clone -b v20201225 https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
 # install ruby
-ENV RBVER 2.5.1
+ENV RBVER 2.6.6
 RUN rbenv install ${RBVER}
 RUN rbenv global ${RBVER}
 
